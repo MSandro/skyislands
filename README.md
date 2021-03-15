@@ -35,6 +35,10 @@ To create a skyblock world in single player mode, use the "more options" button 
 
 You use the lobby as your skyblock in single player.
 
+Click "Customize" to change the skyblock definition.
+
+Optionally you can also choose a lobby, but normally you would leave this as "--" in single player, meaning it will use the skyblock definition.
+
 ## Server
 To create a skyblock world for a server, change the "level-type" to "tatters" in server.properties.
 
@@ -63,6 +67,7 @@ The skyblock definition files in mod-pack-root/config/tatters/skyblocks allow yo
 Tatters has some predefined skyblocks:
 * default.json - a skyblock that should be familiar to modded players
 * traditional.json - more like the original vanilla skyblock
+* example-lobby.json - a simple (and garish) lobby with a command block to generate islands for players
 
 The skyblock configuration options are:
 * enabled - whether the configuration can be used
@@ -109,7 +114,7 @@ This is the example chest configuration from traditional.json. The properties sa
 Some technical notes:
 
 * An easy way to get the properties and nbt for a block is to setup what you want in game and then press F3+i. You can paste the result into a text file.
-* Any double quote " in the nbt value must be escaped as \"
+* Any double quote " in the nbt value must be escaped as \\"
 * When you define the layers, you don't have to define all the air blocks around the edges. Tatters will try to centre the layers you define when they are smaller than other layers. For this reason is it useful to define your layers as an odd number of blocks to clearly state the centre.
 * You will need to define more air blocks around the edge if your design is not symmetrical, e.g. see traditional.json
 * An easy way to try your designs in game is to modify the file then use "/tatters regen @p" to force a new skyblock. Any errors will be in mod-pack-root/logs/latest.log
