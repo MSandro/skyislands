@@ -1,6 +1,8 @@
 # Tatters Skyblock
 [Curseforge](https://www.curseforge.com/minecraft/mc-mods/tatters-skyblock)
 
+[Changelog](CHANGELOG.md)
+
 ## Table of Contents
 * [Overview](#about)
 * [Single Player](#solo)

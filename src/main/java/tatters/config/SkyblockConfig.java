@@ -25,7 +25,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import com.google.common.base.Predicates;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -36,11 +38,12 @@ public class SkyblockConfig extends Config {
     private static final List<List<String>> DEFAULT_LAYERS = Collections.emptyList();
 
     private static final Path SKYBLOCKS_DIR = CONFIG_DIR.resolve("skyblocks");
-    private static Map<String, String> skyblockConfigs = Maps.newConcurrentMap();
+    private static Set<String> activeSkyblockConfigs = Sets.newHashSet();
 
     public final String enabledComment = "Set to false to not load this skyblock";
     public boolean enabled = true;
 
+    public transient String fileName;
     public final String nameComment = "The name to display to the user, can be a translation key";
     public String name;
 
@@ -90,16 +93,35 @@ public class SkyblockConfig extends Config {
     }
 
     static SkyblockConfig getSkyblockConfig(final String name) {
+        return getSkyblockConfig(name, false);
+    }
+
+    static SkyblockConfig getSkyblockConfig(final String name, final boolean ignoreDisabled) {
         final Path file = SKYBLOCKS_DIR.resolve(name);
         final SkyblockConfig result = readFile(file, SkyblockConfig.class);
-        if (!result.enabled)
+        if (!result.enabled) {
+            if (ignoreDisabled) {
+                return null;
+            }
             throw new IllegalStateException("Tried to load disabled skyblock: " + name);
+        }
+        result.fileName = name;
         result.validate();
+        if (result.name == null) {
+            result.name = name;
+        }
         return result;
     }
 
-    public Map<String, String> getSkyblockConfigs() {
-        return Collections.unmodifiableMap(skyblockConfigs);
+    static List<SkyblockConfig> getActiveSkyblockConfigs() {
+        return activeSkyblockConfigs.stream().map((path) -> {
+            try {
+                return getSkyblockConfig(path, true);
+            } catch (Exception e) {
+                log.warn("Ignoring skyblock: " + path, e);
+                return null;
+            }
+        }).filter(Predicates.notNull()).collect(Collectors.toList());
     }
 
     static void copySkyblocks() {
@@ -109,9 +131,11 @@ public class SkyblockConfig extends Config {
         try {
             Files.list(skyblocks).filter(path -> path.getFileName().toString().endsWith(".json")).forEach(path -> {
                 try {
-                    final Path destination = SKYBLOCKS_DIR.resolve(path.getFileName().toString());
+                    final String fileName = path.getFileName().toString();
+                    final Path destination = SKYBLOCKS_DIR.resolve(fileName);
                     if (!Files.exists(destination)) {
                         final SkyblockConfig skyblock = readFile(path, SkyblockConfig.class);
+                        skyblock.fileName = fileName;
                         skyblock.validate();
                         writeFile(destination, skyblock);
                     }
@@ -126,7 +150,7 @@ public class SkyblockConfig extends Config {
     }
 
     static void loadSkyblocks() {
-        final Map<String, String> map = Maps.newConcurrentMap();
+        final Set<String> set = Sets.newHashSet();
         try {
             Files.list(SKYBLOCKS_DIR).filter(path -> path.getFileName().toString().endsWith(".json")).forEach(path -> {
                 try {
@@ -134,16 +158,17 @@ public class SkyblockConfig extends Config {
                     if (skyblock.enabled) {
                         final String pathName = path.getFileName().toString();
                         skyblock.validate();
+                        skyblock.fileName = pathName;
                         if (skyblock.name == null || skyblock.name.isEmpty()) {
                             skyblock.name = pathName;
                         }
-                        map.put(pathName, skyblock.name);
+                        set.add(pathName);
                     }
                 } catch (Exception e) {
                     log.warn("Not loading: " + path, e);
                 }
             });
-            skyblockConfigs = map;
+            activeSkyblockConfigs = set;
         }
         catch (Exception e) {
             throw new RuntimeException("Error loading skyblocks", e);

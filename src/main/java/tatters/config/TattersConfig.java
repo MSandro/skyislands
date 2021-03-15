@@ -21,6 +21,7 @@ import static tatters.TattersMain.log;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import tatters.TattersMain;
 
@@ -63,10 +64,18 @@ public class TattersConfig extends Config {
     }
 
     public SkyblockConfig getLobbyConfig() {
+        return getLobbyConfig(true);
+    }
+
+    public SkyblockConfig getLobbyConfig(final boolean defaultSkyblock) {
         if (this.lobby != null && !lobby.isEmpty()) {
             return SkyblockConfig.getSkyblockConfig(this.lobby);
         }
-        return getSkyblockConfig();
+        return defaultSkyblock ? getSkyblockConfig() : null;
+    }
+
+    public List<SkyblockConfig> getActiveSkyblockConfigs() {
+        return SkyblockConfig.getActiveSkyblockConfigs();
     }
 
     public static TattersConfig loadConfig() {
@@ -81,6 +90,12 @@ public class TattersConfig extends Config {
         result.validate();
         writeFile(file, result);
         return result;
+    }
+
+    public void save() {
+        final Path file = getConfigFile(CONFIG_FILE_NAME);
+        validate();
+        writeFile(file, this);
     }
 
     public static boolean reload() {

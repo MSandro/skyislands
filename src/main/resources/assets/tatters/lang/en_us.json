@@ -13,5 +13,8 @@
   "tatters.command.noskyblock": "Player does not have an island",
   "tatters.command.noteleport": "Cannot teleport players across worlds",
   "tatters.command.reloaded": "Configuration reloaded", 
-  "tatters.command.wrongworld": "This is not a tatters world"
+  "tatters.command.wrongworld": "This is not a tatters world",
+
+  "tatters.gui.lobby": "Lobby",
+  "tatters.gui.skyblock": "Sky Block"
 }
