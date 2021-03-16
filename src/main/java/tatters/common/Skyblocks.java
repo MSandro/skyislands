@@ -32,6 +32,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Util;
 import net.minecraft.world.PersistentState;
+import net.minecraft.world.PersistentStateManager;
 import tatters.TattersMain;
 import tatters.config.SkyblockConfig;
 import tatters.config.TattersConfig;
@@ -47,8 +48,26 @@ public class Skyblocks extends PersistentState {
     public static Skyblocks getSkyblocks(final ServerWorld world) {
         if (TattersMain.isTattersWorld(world) == false)
             return null;
-        final Skyblocks result = world.getPersistentStateManager().getOrCreate(() -> new Skyblocks(), PERSISTANCE_ID);
+        final Skyblocks result = getPersitantState(world);
         result.worldRef = new WeakReference<>(world);
+        return result;
+    }
+
+    private static Skyblocks getPersitantState(final ServerWorld world) {
+        final PersistentStateManager persistentStateManager = world.getPersistentStateManager();
+        // Load existing state
+        Skyblocks result = persistentStateManager.get(() -> new Skyblocks(), PERSISTANCE_ID);
+        if (result != null) {
+           return result;
+        }
+        // No state, create it
+        result = new Skyblocks();
+        final TattersConfig config = TattersConfig.getConfig();
+        result.skyblockPos.spacing = config.spacing;
+        result.skyblockPos.y = config.defaultY;
+        result.lobbyFile = config.getLobbyConfig().fileName;
+        result.skyblockFile = config.getSkyblockConfig().fileName;
+        persistentStateManager.set(result);
         return result;
     }
 
@@ -66,6 +85,10 @@ public class Skyblocks extends PersistentState {
     }
 
     private WeakReference<ServerWorld> worldRef = new WeakReference<ServerWorld>(null);
+
+    private String lobbyFile;
+
+    private String skyblockFile;
 
     private SkyblockPos skyblockPos = new SkyblockPos();
 
@@ -104,20 +127,21 @@ public class Skyblocks extends PersistentState {
     }
 
     public Skyblock createLobby() {
-        final Skyblock lobby = createSkyblock(Util.NIL_UUID, "<lobby>", TattersConfig.getConfig().getLobbyConfig());
+        final Skyblock lobby = createSkyblock(Util.NIL_UUID, "<lobby>", this.lobbyFile);
         getWorld().setSpawnPos(lobby.getSpawnPos(), 0.0F);
         return lobby;
     }
 
     public Skyblock createSkyblock(final ServerPlayerEntity player) {
-        return createSkyblock(player.getUuid(), player.getEntityName(), TattersConfig.getConfig().getSkyblockConfig());
+        return createSkyblock(player.getUuid(), player.getEntityName(), this.skyblockFile);
     }
 
     public Skyblock createSkyblock(final Team team) {
-        return createSkyblock(getTeamUUID(team), team.getName(), TattersConfig.getConfig().getSkyblockConfig());
+        return createSkyblock(getTeamUUID(team), team.getName(), this.skyblockFile);
     }
 
-    public Skyblock createSkyblock(final UUID uuid, final String name, final SkyblockConfig config) {
+    public Skyblock createSkyblock(final UUID uuid, final String name, final String file) {
+        final SkyblockConfig config = TattersConfig.getConfig().getSkyblockConfig(file);
         final Skyblock skyblock = new Skyblock(this, uuid, name);
         skyblock.create(config);
         this.skyblocksByPlayer.put(uuid, skyblock);
@@ -128,6 +152,8 @@ public class Skyblocks extends PersistentState {
     @Override
     public void fromTag(final CompoundTag tag) {
         this.skyblockPos.fromTag(tag.getCompound("skyblockPos"));
+        this.lobbyFile = tag.getString("lobby");
+        this.skyblockFile = tag.getString("skyblock");
 
         final Map<UUID, Skyblock> map = Maps.newConcurrentMap();
         final CompoundTag skyblocks = tag.getCompound("skyblocks");
@@ -143,6 +169,8 @@ public class Skyblocks extends PersistentState {
     @Override
     public CompoundTag toTag(final CompoundTag tag) {
         tag.put("skyblockPos", this.skyblockPos.toTag(new CompoundTag()));
+        tag.putString("lobby", lobbyFile);
+        tag.putString("skyblock", skyblockFile);
         
         final CompoundTag skyblocks = new CompoundTag();
         this.skyblocksByPlayer.forEach((uuid, skyblock) -> {

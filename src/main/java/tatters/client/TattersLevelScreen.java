@@ -55,8 +55,11 @@ public class TattersLevelScreen extends Screen {
     }
 
     protected void init() {
+        // Ensure configuration is up-to-date with file system
+        TattersConfig.reload(true);
         final TattersConfig config = TattersConfig.getConfig();
         this.skyblockConfigs = config.getActiveSkyblockConfigs();
+
         this.client.keyboard.setRepeatEvents(true);
         this.lobbySelectionList = new SkyblockListWidget(config.getLobbyConfig(false), true, 0);
         this.children.add(this.lobbySelectionList);

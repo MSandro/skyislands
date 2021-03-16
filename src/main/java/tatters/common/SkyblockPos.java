@@ -19,17 +19,16 @@ package tatters.common;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
-import tatters.config.TattersConfig;
 
 public class SkyblockPos {
 
-    private int spacing = TattersConfig.getConfig().spacing;
+    int spacing = 1000;
 
     private int layer = 0;
 
     private int x = 0;
 
-    private int y = TattersConfig.getConfig().defaultY;
+    int y = 80;
 
     private int z = 0;
 

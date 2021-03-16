@@ -60,7 +60,7 @@ public class TattersCommand {
     }
 
     public static int reload(final CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        if (TattersConfig.reload()) {
+        if (TattersConfig.reload(false)) {
             feedback(context, "tatters.command.reloaded");
             return Command.SINGLE_SUCCESS;
         } else {

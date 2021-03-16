@@ -74,6 +74,10 @@ public class TattersConfig extends Config {
         return defaultSkyblock ? getSkyblockConfig() : null;
     }
 
+    public SkyblockConfig getSkyblockConfig(final String file) {
+        return SkyblockConfig.getSkyblockConfig(file);
+    }
+
     public List<SkyblockConfig> getActiveSkyblockConfigs() {
         return SkyblockConfig.getActiveSkyblockConfigs();
     }
@@ -98,12 +102,15 @@ public class TattersConfig extends Config {
         writeFile(file, this);
     }
 
-    public static boolean reload() {
+    public static boolean reload(final boolean throwError) {
         final Path file = getConfigFile(CONFIG_FILE_NAME);
         try {
             CONFIG = loadConfig();
             return true;
         } catch (Exception e) {
+            if (throwError) {
+                throw new RuntimeException("Error loading config: " + file, e);
+            }
             log.error("Error reloading: " + file, e);
             return false;
         }
