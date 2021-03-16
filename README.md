@@ -47,6 +47,8 @@ If you are just collaborating with friends, you can use the lobby as your skyblo
 For a more public server, it is recommended to add a command block with a button to the lobby that runs the command "tatters home @p".
 <br> This will allow non-op users to create new islands and be teleported to them automatically.
 
+There is an example lobby skyblock in config/tatters/skyblock/example-lobby.json
+
 ## Teams
 There is rudimentary support for teams. You first need to create your minecraft teams, e.g. "/team add teamName". 
 
@@ -68,12 +70,14 @@ Tatters has some predefined skyblocks:
 * default.json - a skyblock that should be familiar to modded players
 * traditional.json - more like the original vanilla skyblock
 * example-lobby.json - a simple (and garish) lobby with a command block to generate islands for players
+* stone.json - a stoneblock like skyblock configuration
 
 The skyblock configuration options are:
 * enabled - whether the configuration can be used
-* name - a user readable name - not currently used by the code
+* name - a user readable name (it can be a translation key)
 * layers - this is the layout of the blocks starting from the bottom layer. Each character is a block defined in the mappings, except for space which is an air block and ! marks the spawn point (also an air block)
 * mappings - maps a character to a block definition
+* fillers - used to fill the void, these work the same as the super flat world type configuration
 
 The layers are a three dimensional array, e.g. 3x3 bedrock below 3x3 dirt from the default.json:
 
@@ -119,6 +123,22 @@ Some technical notes:
 * You will need to define more air blocks around the edge if your design is not symmetrical, e.g. see traditional.json
 * An easy way to try your designs in game is to modify the file then use "/tatters regen @p" to force a new skyblock. Any errors will be in mod-pack-root/logs/latest.log
 * When the spawn point is not defined for a skyblock (using the ! character) it is calculated as the centre of the skyblock and 1 block above the top layer 
+
+The fillers have two elements, they are applied from the bottom of the world
+* block - the minecraft block id
+* thickness - how many layers of blocks (default 1)
+
+This is an example from the stone configuration: 
+
+```
+  "fillers": [
+    { "block": "minecraft:bedrock", thickness: 1 },
+    { "block": "minecraft:stone", thickness: 250 },
+    { "block": "minecraft:lava", thickness: 5 }
+  ]
+```
+
+NOTE: when using fillers make sure you include air blocks (spaces) in your skyblock layers to remove the filler material
 
 ## Commands
 Type the command "/tatters help" in game, to see the available commands. Or you can see the help in the translations file below.

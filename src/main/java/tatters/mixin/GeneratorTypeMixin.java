@@ -52,7 +52,7 @@ public class GeneratorTypeMixin {
         VALUES.add(1, tattersGenerator);
         SCREEN_PROVIDERS = Maps.newHashMap(SCREEN_PROVIDERS);
         SCREEN_PROVIDERS.put(Optional.of(tattersGenerator), (screen, generatorOptions) -> {
-            return new TattersLevelScreen(screen);
+            return new TattersLevelScreen(screen, generatorOptions);
         });
 
         // TODO figure out how to display a toast for config errors instead of crashing

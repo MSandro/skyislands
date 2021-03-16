@@ -17,10 +17,8 @@
  */
 package tatters.mixin;
 
-import java.util.Collections;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Properties;
 import java.util.Random;
 
@@ -40,7 +38,6 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.GeneratorOptions;
 import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 import net.minecraft.world.gen.chunk.FlatChunkGeneratorConfig;
-import net.minecraft.world.gen.chunk.StructuresConfig;
 import tatters.TattersMain;
 import tatters.common.TattersChunkGenerator;
 
@@ -84,8 +81,7 @@ public class GeneratorOptionsMixin {
         final Registry<ChunkGeneratorSettings> noiseSettings = dynamicRegistryManager.get(Registry.NOISE_SETTINGS_WORLDGEN);
         final SimpleRegistry<DimensionOptions> defaultDimensions = DimensionType.createDefaultDimensionOptions(dimensionTypes, biomeRegistry, noiseSettings, seed);
         // TODO figure out a way to reliably start at the equivalent of this point in fromProperties()
-        final StructuresConfig structuresConfig = new StructuresConfig(Optional.empty(), Collections.emptyMap());
-        final FlatChunkGeneratorConfig config = new FlatChunkGeneratorConfig(structuresConfig, biomeRegistry);
+        final FlatChunkGeneratorConfig config = TattersChunkGenerator.createConfig(biomeRegistry);
         final TattersChunkGenerator chunkGenerator = new TattersChunkGenerator(config);
         final SimpleRegistry<DimensionOptions> dimensionOptions = GeneratorOptions.method_28608(dimensionTypes, defaultDimensions, chunkGenerator);
         final GeneratorOptions result = new GeneratorOptions(seed, generateStructures, false, dimensionOptions);

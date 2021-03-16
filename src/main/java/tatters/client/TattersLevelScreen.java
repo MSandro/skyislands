@@ -31,6 +31,8 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Language;
+import net.minecraft.world.gen.GeneratorOptions;
+import tatters.common.TattersChunkGenerator;
 import tatters.config.SkyblockConfig;
 import tatters.config.TattersConfig;
 
@@ -40,14 +42,16 @@ public class TattersLevelScreen extends Screen {
     private static final Text SKYBLOCK_TEXT = new TranslatableText("tatters.gui.skyblock");
 
     private final Screen parent;
+    private final GeneratorOptions generatorOptions;
     private SkyblockListWidget lobbySelectionList;
     private SkyblockListWidget skyblockSelectionList;
     private List<SkyblockConfig> skyblockConfigs;
     private ButtonWidget confirmButton;
 
-    public TattersLevelScreen(final Screen parent) {
+    public TattersLevelScreen(final Screen parent, final GeneratorOptions generatorOptions) {
         super(new TranslatableText("generator.tatters"));
         this.parent = parent;
+        this.generatorOptions = generatorOptions;
     }
 
     public void onClose() {
@@ -72,6 +76,8 @@ public class TattersLevelScreen extends Screen {
                             : this.lobbySelectionList.selection.fileName;
                     tattersConfig.skyblock = this.skyblockSelectionList.selection.fileName;
                     tattersConfig.save();
+                    final TattersChunkGenerator generator = (TattersChunkGenerator) generatorOptions.getChunkGenerator();
+                    generator.updateConfig();
                     this.client.openScreen(this.parent);
                 }));
         this.addButton(

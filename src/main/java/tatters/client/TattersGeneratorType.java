@@ -17,9 +17,6 @@
  */
 package tatters.client;
 
-import java.util.Collections;
-import java.util.Optional;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.world.GeneratorType;
@@ -28,7 +25,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 import net.minecraft.world.gen.chunk.FlatChunkGeneratorConfig;
-import net.minecraft.world.gen.chunk.StructuresConfig;
 import tatters.TattersMain;
 import tatters.common.TattersChunkGenerator;
 
@@ -46,7 +42,6 @@ public class TattersGeneratorType extends GeneratorType {
     }
 
     protected FlatChunkGeneratorConfig getConfig(final Registry<Biome> biomeRegistry) {
-        final StructuresConfig structuresConfig = new StructuresConfig(Optional.empty(), Collections.emptyMap());
-        return new FlatChunkGeneratorConfig(structuresConfig, biomeRegistry);
+        return TattersChunkGenerator.createConfig(biomeRegistry);
     }
 }

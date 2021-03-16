@@ -17,18 +17,49 @@
  */
 package tatters.common;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
 import com.mojang.serialization.Codec;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.chunk.FlatChunkGenerator;
 import net.minecraft.world.gen.chunk.FlatChunkGeneratorConfig;
+import net.minecraft.world.gen.chunk.FlatChunkGeneratorLayer;
+import net.minecraft.world.gen.chunk.StructuresConfig;
+import tatters.config.SkyblockConfig;
+import tatters.config.TattersConfig;
 
-public class TattersChunkGenerator extends FlatChunkGenerator {
+public class TattersChunkGenerator extends FlatChunkGenerator implements TattersFlatChunkGenerator {
 
     public static final Codec<TattersChunkGenerator> CODEC;
 
+    public static FlatChunkGeneratorConfig createConfig(final Registry<Biome> biomeRegistry) {
+        final TattersConfig config = TattersConfig.getConfig();
+        final SkyblockConfig lobby = config.getLobbyConfig();
+        final StructuresConfig structuresConfig = new StructuresConfig(Optional.empty(), Collections.emptyMap());
+        final List<FlatChunkGeneratorLayer> layers = lobby.getFiller();
+        final Biome biome = biomeRegistry.getOrThrow(BiomeKeys.PLAINS);
+        return new FlatChunkGeneratorConfig(biomeRegistry, structuresConfig, layers, false, false, Optional.of(() -> biome));
+    }
+
     public TattersChunkGenerator(final FlatChunkGeneratorConfig config) {
         super(config);
+    }
+
+    @Environment(EnvType.CLIENT)
+    public void updateConfig() {
+        final TattersConfig config = TattersConfig.getConfig();
+        final SkyblockConfig lobby = config.getLobbyConfig();
+        final StructuresConfig structuresConfig = new StructuresConfig(Optional.empty(), Collections.emptyMap());
+        final List<FlatChunkGeneratorLayer> layers = lobby.getFiller();
+        tattersSetConfig(getConfig().method_29965(layers, structuresConfig));
     }
 
     protected Codec<? extends ChunkGenerator> getCodec() {

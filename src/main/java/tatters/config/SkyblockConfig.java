@@ -28,9 +28,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.google.common.base.Predicates;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
+import net.minecraft.world.gen.chunk.FlatChunkGeneratorLayer;
 import tatters.TattersMain;
 
 public class SkyblockConfig extends Config {
@@ -52,6 +54,9 @@ public class SkyblockConfig extends Config {
 
     public final String mappingComment = "block key definitions: key -> block, properties, nbt";
     public Map<Character, SkyblockBlockDefinition> mapping = Maps.newLinkedHashMap();
+
+    public final String fillersComment = "list of block and thickness (default 1)";
+    public List<SkyblockFillerDefinition> fillers;
 
     public void validate() {
         if (!enabled)
@@ -90,6 +95,18 @@ public class SkyblockConfig extends Config {
         if (!blockKeys.isEmpty()) {
             throw new IllegalArgumentException("Blocks have no mapping: " + blockKeys);
         }
+
+        if (fillers != null) {
+            fillers.stream().forEach((filler) -> filler.validate());
+        }
+    }
+
+    public List<FlatChunkGeneratorLayer> getFiller() {
+        List<FlatChunkGeneratorLayer> result = Lists.newArrayList();
+        if (this.fillers != null) {
+            this.fillers.forEach(filler -> result.add(filler.getChunkGeneratorLayer()));
+        }
+        return result;
     }
 
     static SkyblockConfig getSkyblockConfig(final String name) {

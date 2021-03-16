@@ -6,6 +6,7 @@
   "mixins": [
     "ChunkGeneratorMixin",
     "CommandManagerMixin",
+    "FlatChunkGeneratorMixin",
     "GeneratorOptionsMixin",
     "ServerWorldMixin"
   ],
