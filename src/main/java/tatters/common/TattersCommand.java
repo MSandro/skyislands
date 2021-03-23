@@ -53,83 +53,123 @@ public class TattersCommand {
     }
 
     public static int help(final CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        for (int i = 0; i < 8; ++i) {
-            feedback(context, "tatters.command.help." + i);
+        try {
+            for (int i = 0; i < 8; ++i) {
+                feedback(context, "tatters.command.help." + i);
+            }
+            return Command.SINGLE_SUCCESS;
         }
-        return Command.SINGLE_SUCCESS;
+        catch (Exception e) {
+            throw handleError(e);
+        }
     }
 
     public static int reload(final CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        if (TattersConfig.reload(false)) {
-            feedback(context, "tatters.command.reloaded");
-            return Command.SINGLE_SUCCESS;
-        } else {
-            feedback(context, "tatters.command.error");
-            return 0;
+        try {
+            if (TattersConfig.reload(false)) {
+                feedback(context, "tatters.command.reloaded");
+                return Command.SINGLE_SUCCESS;
+            } else {
+                feedback(context, "tatters.command.error");
+                return 0;
+            }
+        }
+        catch (Exception e) {
+            throw handleError(e);
         }
     }
 
     public static int list(final CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        final Skyblocks skyblocks = getSkyblocks(context);
-        for (Skyblock skyblock : skyblocks.listSkyblocks()) {
-            log.info(skyblock.getUUID() + " " + skyblock.getName() + " " + skyblock.getSpawnPos());
+        try {
+            final Skyblocks skyblocks = getSkyblocks(context);
+            for (Skyblock skyblock : skyblocks.listSkyblocks()) {
+                log.info(skyblock.getUUID() + " " + skyblock.getName() + " " + skyblock.getSpawnPos());
+            }
+            return Command.SINGLE_SUCCESS;
         }
-        return Command.SINGLE_SUCCESS;
+        catch (Exception e) {
+            throw handleError(e);
+        }
     }
 
     public static int lobby(final CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        final Skyblocks skyblocks = getSkyblocks(context);
-        final ServerPlayerEntity player = context.getSource().getPlayer();
-        final Skyblock lobby = skyblocks.getLobby();
-        teleport(lobby, player);
-        return Command.SINGLE_SUCCESS;
+        try {
+            final Skyblocks skyblocks = getSkyblocks(context);
+            final ServerPlayerEntity player = context.getSource().getPlayer();
+            final Skyblock lobby = skyblocks.getLobby();
+            teleport(lobby, player);
+            return Command.SINGLE_SUCCESS;
+        }
+        catch (Exception e) {
+            throw handleError(e);
+        }
     }
 
     public static int home(final CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        final Skyblocks skyblocks = getSkyblocks(context);
-        final ServerPlayerEntity player = playerParameter(context);
-        Skyblock skyblock = skyblocks.getSkyblock(player);
-        if (skyblock == null) {
-            skyblock = skyblocks.createSkyblock(player);
-            skyblock.setPlayerSpawn(player);
+        try {
+            final Skyblocks skyblocks = getSkyblocks(context);
+            final ServerPlayerEntity player = playerParameter(context);
+            Skyblock skyblock = skyblocks.getSkyblock(player);
+            if (skyblock == null) {
+                skyblock = skyblocks.createSkyblock(player);
+                skyblock.setPlayerSpawn(player);
+            }
+            teleport(skyblock, player);
+            return Command.SINGLE_SUCCESS;
         }
-        teleport(skyblock, player);
-        return Command.SINGLE_SUCCESS;
+        catch (Exception e) {
+            throw handleError(e);
+        }
     }
 
     public static int regen(final CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        final Skyblocks skyblocks = getSkyblocks(context);
-        final ServerPlayerEntity player = playerParameter(context);
-        final Skyblock skyblock = skyblocks.createSkyblock(player);
-        skyblock.setPlayerSpawn(player);
-        teleport(skyblock, player);
-        return Command.SINGLE_SUCCESS;
+        try {
+            final Skyblocks skyblocks = getSkyblocks(context);
+            final ServerPlayerEntity player = playerParameter(context);
+            final Skyblock skyblock = skyblocks.createSkyblock(player);
+            skyblock.setPlayerSpawn(player);
+            teleport(skyblock, player);
+            return Command.SINGLE_SUCCESS;
+        }
+        catch (Exception e) {
+            throw handleError(e);
+        }
     }
 
     public static int visit(final CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        final Skyblocks skyblocks = getSkyblocks(context);
-        final ServerPlayerEntity player = context.getSource().getPlayer();
-        final ServerPlayerEntity toVisit = playerParameter(context);
-        final Skyblock skyblock = skyblocks.getSkyblock(toVisit);
-        if (skyblock == null) {
-            throw error("tatters.command.noskyblock");
+        try {
+            final Skyblocks skyblocks = getSkyblocks(context);
+            final ServerPlayerEntity player = context.getSource().getPlayer();
+            final ServerPlayerEntity toVisit = playerParameter(context);
+            final Skyblock skyblock = skyblocks.getSkyblock(toVisit);
+            if (skyblock == null) {
+                throw error("tatters.command.noskyblock");
+            }
+            teleport(skyblock, player);
+            return Command.SINGLE_SUCCESS;
         }
-        teleport(skyblock, player);
-        return Command.SINGLE_SUCCESS;
+        catch (Exception e) {
+            throw handleError(e);
+        }
     }
 
     public static int team(final CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        final Skyblocks skyblocks = getSkyblocks(context);
-        final ServerPlayerEntity player = playerParameter(context);
-        final Team team = teamParameter(context);
-        Skyblock skyblock = skyblocks.getSkyblock(team);
-        if (skyblock == null) {
-            skyblock = skyblocks.createSkyblock(team);
+        try {
+            final Skyblocks skyblocks = getSkyblocks(context);
+            final ServerPlayerEntity player = playerParameter(context);
+            final Team team = teamParameter(context);
+            Skyblock skyblock = skyblocks.getSkyblock(team);
+            if (skyblock == null) {
+                skyblock = skyblocks.createSkyblock(team);
+            }
+            skyblocks.getWorld().getScoreboard().addPlayerToTeam(player.getEntityName(), team);
+            skyblock.setPlayerSpawn(player);
+            teleport(skyblock, player);
+            return Command.SINGLE_SUCCESS;
         }
-        skyblocks.getWorld().getScoreboard().addPlayerToTeam(player.getEntityName(), team);
-        skyblock.setPlayerSpawn(player);
-        teleport(skyblock, player);
-        return Command.SINGLE_SUCCESS;
+        catch (Exception e) {
+            throw handleError(e);
+        }
     }
 
     public static Skyblocks getSkyblocks(final CommandContext<ServerCommandSource> context)
@@ -180,5 +220,12 @@ public class TattersCommand {
 
     public static CommandSyntaxException error(final String error) {
         return new SimpleCommandExceptionType(new TranslatableText(error)).create();
+    }
+
+    public static CommandSyntaxException handleError(final Exception e) {
+        if (e instanceof CommandSyntaxException)
+            return (CommandSyntaxException) e;
+        log.error("Unexpected error in command", e);
+        return new SimpleCommandExceptionType(new TranslatableText("tatters.command.error")).create();
     }
 }

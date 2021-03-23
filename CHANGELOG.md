@@ -1,7 +1,8 @@
 ## Change Log
 
 ### 0.0.3
-Fix the validation of block ids instead of just creating air block for unknown blocks
+* Fix the validation of block ids instead of just creating air block for unknown blocks (warjort)
+* Try to improve the error handling for commands to stop crashing and Minecraft eating error messages (warjort)
 
 ### 0.0.2
 * Add a customisation screen to select the lobby/skyblock in Create New World, More Options (warjort)
