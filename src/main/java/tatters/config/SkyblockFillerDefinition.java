@@ -17,6 +17,8 @@
  */
 package tatters.config;
 
+import java.util.Optional;
+
 import net.minecraft.block.Block;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -49,10 +51,13 @@ public class SkyblockFillerDefinition {
     private Block parseBlock() {
         if (this.block == null)
             throw new IllegalArgumentException("Null block");
-        final Identifier identifier = new Identifier(this.block);
-        this.theBlock = blocks.get(identifier);
-        if (theBlock == null) {
-            throw new IllegalArgumentException("Unknown block: " + identifier);
+        if (this.theBlock == null) {
+            final Identifier identifier = new Identifier(this.block);
+            final Optional<Block> blockTest = blocks.getOrEmpty(identifier);
+            if (!blockTest.isPresent()) {
+                throw new IllegalArgumentException("Unknown block: " + identifier);
+            }
+            this.theBlock = blockTest.get();
         }
         return this.theBlock;
     }

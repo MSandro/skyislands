@@ -86,10 +86,11 @@ public class SkyblockBlockDefinition {
             return;
         }
         final Identifier identifier = new Identifier(this.block);
-        final Block block = blocks.get(identifier);
-        if (block == null) {
+        final Optional<Block> blockTest = blocks.getOrEmpty(identifier);
+        if (!blockTest.isPresent()) {
             throw new IllegalArgumentException("Unknown block: " + identifier);
         }
+        final Block block = blockTest.get();
         this.blockState = block.getDefaultState();
         if (this.properties != null) {
             try {

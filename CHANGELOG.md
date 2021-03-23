@@ -1,5 +1,8 @@
 ## Change Log
 
+### 0.0.3
+Fix the validation of block ids instead of just creating air block for unknown blocks
+
 ### 0.0.2
 * Add a customisation screen to select the lobby/skyblock in Create New World, More Options (warjort)
 * Add an example lobby config (warjort)
