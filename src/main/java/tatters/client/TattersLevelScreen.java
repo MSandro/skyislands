@@ -26,12 +26,14 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.EntryListWidget;
+import net.minecraft.client.toast.SystemToast;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Language;
 import net.minecraft.world.gen.GeneratorOptions;
+import tatters.TattersMain;
 import tatters.common.TattersChunkGenerator;
 import tatters.config.SkyblockConfig;
 import tatters.config.TattersConfig;
@@ -60,9 +62,18 @@ public class TattersLevelScreen extends Screen {
 
     protected void init() {
         // Ensure configuration is up-to-date with file system
-        TattersConfig.reload(true);
-        final TattersConfig config = TattersConfig.getConfig();
-        this.skyblockConfigs = config.getActiveSkyblockConfigs();
+        TattersConfig config;
+        try {
+            TattersConfig.reload(true);
+            config = TattersConfig.getConfig();
+            this.skyblockConfigs = config.getActiveSkyblockConfigs();
+        }
+        catch (Throwable e) {
+            TattersMain.log.error(e);
+            SystemToast.show(this.client.getToastManager(), SystemToast.Type.WORLD_GEN_SETTINGS_TRANSFER, SKYBLOCK_TEXT, new TranslatableText("tatters.gui.error"));
+            this.client.openScreen(this.parent);
+            return;
+        }
 
         this.client.keyboard.setRepeatEvents(true);
         this.lobbySelectionList = new SkyblockListWidget(config.getLobbyConfig(false), true, 0);
@@ -71,13 +82,19 @@ public class TattersLevelScreen extends Screen {
         this.children.add(this.skyblockSelectionList);
         this.confirmButton = this.addButton(
                 new ButtonWidget(this.width / 2 - 155, this.height - 28, 150, 20, ScreenTexts.DONE, (buttonWidget) -> {
-                    TattersConfig tattersConfig = TattersConfig.getConfig();
-                    tattersConfig.lobby = this.lobbySelectionList.selection == null ? ""
-                            : this.lobbySelectionList.selection.fileName;
-                    tattersConfig.skyblock = this.skyblockSelectionList.selection.fileName;
-                    tattersConfig.save();
-                    final TattersChunkGenerator generator = (TattersChunkGenerator) generatorOptions.getChunkGenerator();
-                    generator.updateConfig();
+                    try {
+                        TattersConfig tattersConfig = TattersConfig.getConfig();
+                        tattersConfig.lobby = this.lobbySelectionList.selection == null ? ""
+                                : this.lobbySelectionList.selection.fileName;
+                        tattersConfig.skyblock = this.skyblockSelectionList.selection.fileName;
+                        tattersConfig.save();
+                        final TattersChunkGenerator generator = (TattersChunkGenerator) generatorOptions.getChunkGenerator();
+                        generator.updateConfig();
+                    }
+                    catch (Throwable e) {
+                        TattersMain.log.error(e);
+                        SystemToast.show(this.client.getToastManager(), SystemToast.Type.WORLD_GEN_SETTINGS_TRANSFER, SKYBLOCK_TEXT, new TranslatableText("tatters.gui.error"));
+                    }
                     this.client.openScreen(this.parent);
                 }));
         this.addButton(

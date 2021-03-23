@@ -28,7 +28,7 @@ import tatters.TattersMain;
 public class TattersConfig extends Config {
 
     private static final String CONFIG_FILE_NAME = TattersMain.MOD_ID + ".json";
-    private static TattersConfig CONFIG = loadConfig();
+    private static TattersConfig CONFIG = null;
 
     public final String spacingComment = "The size of the skyblock grid";
     public int spacing = 1000;
@@ -44,6 +44,8 @@ public class TattersConfig extends Config {
     public String lobby = "";
 
     public static final TattersConfig getConfig() {
+        if (CONFIG == null)
+            CONFIG = loadConfig();
         return CONFIG;
     }
 

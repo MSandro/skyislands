@@ -54,7 +54,5 @@ public class GeneratorTypeMixin {
         SCREEN_PROVIDERS.put(Optional.of(tattersGenerator), (screen, generatorOptions) -> {
             return new TattersLevelScreen(screen, generatorOptions);
         });
-
-        // TODO figure out how to display a toast for config errors instead of crashing
     }
 }

@@ -3,6 +3,7 @@
 ### 0.0.3
 * Fix the validation of block ids instead of just creating air block for unknown blocks (warjort)
 * Try to improve the error handling for commands to stop crashing and Minecraft eating error messages (warjort)
+* Try to avoid crashes in the create new world screen, display toasts instead (warjort)
 
 ### 0.0.2
 * Add a customisation screen to select the lobby/skyblock in Create New World, More Options (warjort)

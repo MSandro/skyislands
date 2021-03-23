@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
 
 import net.fabricmc.api.EnvType;
@@ -33,6 +34,7 @@ import net.minecraft.world.gen.chunk.FlatChunkGenerator;
 import net.minecraft.world.gen.chunk.FlatChunkGeneratorConfig;
 import net.minecraft.world.gen.chunk.FlatChunkGeneratorLayer;
 import net.minecraft.world.gen.chunk.StructuresConfig;
+import tatters.TattersMain;
 import tatters.config.SkyblockConfig;
 import tatters.config.TattersConfig;
 
@@ -41,10 +43,16 @@ public class TattersChunkGenerator extends FlatChunkGenerator implements Tatters
     public static final Codec<TattersChunkGenerator> CODEC;
 
     public static FlatChunkGeneratorConfig createConfig(final Registry<Biome> biomeRegistry) {
-        final TattersConfig config = TattersConfig.getConfig();
-        final SkyblockConfig lobby = config.getLobbyConfig();
+        List<FlatChunkGeneratorLayer> layers = Lists.newArrayList();
+        try {
+            final TattersConfig config = TattersConfig.getConfig();
+            final SkyblockConfig lobby = config.getLobbyConfig();
+            layers = lobby.getFiller();
+        }
+        catch (Throwable e) {
+            TattersMain.log.warn("Error reading config", e);
+        }
         final StructuresConfig structuresConfig = new StructuresConfig(Optional.empty(), Collections.emptyMap());
-        final List<FlatChunkGeneratorLayer> layers = lobby.getFiller();
         final Biome biome = biomeRegistry.getOrThrow(BiomeKeys.PLAINS);
         return new FlatChunkGeneratorConfig(biomeRegistry, structuresConfig, layers, false, false, Optional.of(() -> biome));
     }
