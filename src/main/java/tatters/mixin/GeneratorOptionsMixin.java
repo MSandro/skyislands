@@ -29,24 +29,24 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.google.common.base.MoreObjects;
 
-import net.minecraft.util.registry.DynamicRegistryManager;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.SimpleRegistry;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.dimension.DimensionOptions;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.gen.GeneratorOptions;
-import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
-import net.minecraft.world.gen.chunk.FlatChunkGeneratorConfig;
+import net.minecraft.core.MappedRegistry;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.dimension.LevelStem;
+import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
+import net.minecraft.world.level.levelgen.WorldGenSettings;
+import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorSettings;
 import tatters.TattersMain;
 import tatters.common.TattersChunkGenerator;
 
 // TODO add void nether/end handling
-@Mixin(GeneratorOptions.class)
+@Mixin(WorldGenSettings.class)
 public class GeneratorOptionsMixin {
 
-    @Inject(method = "fromProperties", at = @At("HEAD"), cancellable = true)
-    private static void tattersGeneratorOptions(final DynamicRegistryManager dynamicRegistryManager, final Properties properties, final CallbackInfoReturnable<GeneratorOptions> ci) {
+    @Inject(method = "create", at = @At("HEAD"), cancellable = true)
+    private static void tattersGeneratorOptions(final RegistryAccess dynamicRegistryManager, final Properties properties, final CallbackInfoReturnable<WorldGenSettings> ci) {
         String levelType = (String) properties.get("level-type");
         if (levelType == null)
             return;
@@ -75,15 +75,15 @@ public class GeneratorOptionsMixin {
         final boolean generateStructures = genStructures == null || Boolean.parseBoolean(genStructures);
         properties.put("generate-structures", Objects.toString(generateStructures));
 
-        final Registry<DimensionType> dimensionTypes = dynamicRegistryManager.get(Registry.DIMENSION_TYPE_KEY);
-        final Registry<Biome> biomeRegistry = dynamicRegistryManager.get(Registry.BIOME_KEY);
-        final Registry<ChunkGeneratorSettings> noiseSettings = dynamicRegistryManager.get(Registry.NOISE_SETTINGS_WORLDGEN);
-        final SimpleRegistry<DimensionOptions> defaultDimensions = DimensionType.createDefaultDimensionOptions(dimensionTypes, biomeRegistry, noiseSettings, seed);
+        final Registry<DimensionType> dimensionTypes = dynamicRegistryManager.registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY);
+        final Registry<Biome> biomeRegistry = dynamicRegistryManager.registryOrThrow(Registry.BIOME_REGISTRY);
+        final Registry<NoiseGeneratorSettings> noiseSettings = dynamicRegistryManager.registryOrThrow(Registry.NOISE_GENERATOR_SETTINGS_REGISTRY);
+        final MappedRegistry<LevelStem> defaultDimensions = DimensionType.defaultDimensions(dimensionTypes, biomeRegistry, noiseSettings, seed);
         // TODO figure out a way to reliably start at the equivalent of this point in fromProperties()
-        final FlatChunkGeneratorConfig config = TattersChunkGenerator.createConfig(biomeRegistry);
+        final FlatLevelGeneratorSettings config = TattersChunkGenerator.createConfig(biomeRegistry);
         final TattersChunkGenerator chunkGenerator = new TattersChunkGenerator(config);
-        final SimpleRegistry<DimensionOptions> dimensionOptions = GeneratorOptions.method_28608(dimensionTypes, defaultDimensions, chunkGenerator);
-        final GeneratorOptions result = new GeneratorOptions(seed, generateStructures, false, dimensionOptions);
+        final MappedRegistry<LevelStem> dimensionOptions = WorldGenSettings.withOverworld(dimensionTypes, defaultDimensions, chunkGenerator);
+        final WorldGenSettings result = new WorldGenSettings(seed, generateStructures, false, dimensionOptions);
         ci.setReturnValue(result);
     }
 }

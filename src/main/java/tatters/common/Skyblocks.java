@@ -26,18 +26,18 @@ import java.util.UUID;
 
 import com.google.common.collect.Maps;
 
+import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.scoreboard.Team;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Util;
-import net.minecraft.world.PersistentState;
-import net.minecraft.world.PersistentStateManager;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.storage.DimensionDataStorage;
+import net.minecraft.world.scores.Team;
 import tatters.TattersMain;
 import tatters.config.SkyblockConfig;
 import tatters.config.TattersConfig;
 
-public class Skyblocks extends PersistentState {
+public class Skyblocks extends SavedData {
 
     public static final String PERSISTANCE_ID = Skyblocks.class.getName();
 
@@ -45,7 +45,7 @@ public class Skyblocks extends PersistentState {
         return UUID.nameUUIDFromBytes(("team:" + team.getName()).getBytes(StandardCharsets.UTF_8));
     }
 
-    public static Skyblocks getSkyblocks(final ServerWorld world) {
+    public static Skyblocks getSkyblocks(final ServerLevel world) {
         if (TattersMain.isTattersWorld(world) == false)
             return null;
         final Skyblocks result = getPersitantState(world);
@@ -53,8 +53,8 @@ public class Skyblocks extends PersistentState {
         return result;
     }
 
-    private static Skyblocks getPersitantState(final ServerWorld world) {
-        final PersistentStateManager persistentStateManager = world.getPersistentStateManager();
+    private static Skyblocks getPersitantState(final ServerLevel world) {
+        final DimensionDataStorage persistentStateManager = world.getDataStorage();
         // Load existing state
         Skyblocks result = persistentStateManager.get(() -> new Skyblocks(), PERSISTANCE_ID);
         if (result != null) {
@@ -71,7 +71,7 @@ public class Skyblocks extends PersistentState {
         return result;
     }
 
-    public static void onServerPlayerLoad(final ServerPlayerEntity player, final ServerWorld world) {
+    public static void onServerPlayerLoad(final ServerPlayer player, final ServerLevel world) {
         final Skyblocks skyblocks = Skyblocks.getSkyblocks(world);
         if (skyblocks == null)
             return;
@@ -84,7 +84,7 @@ public class Skyblocks extends PersistentState {
         }
     }
 
-    private WeakReference<ServerWorld> worldRef = new WeakReference<>(null);
+    private WeakReference<ServerLevel> worldRef = new WeakReference<>(null);
 
     private String lobbyFile;
 
@@ -98,7 +98,7 @@ public class Skyblocks extends PersistentState {
         super(PERSISTANCE_ID);
     }
 
-    public ServerWorld getWorld() {
+    public ServerLevel getWorld() {
         return this.worldRef.get();
     }
 
@@ -114,8 +114,8 @@ public class Skyblocks extends PersistentState {
         return getSkyblock(Util.NIL_UUID);
     }
 
-    public Skyblock getSkyblock(final ServerPlayerEntity player) {
-        return getSkyblock(player.getUuid());
+    public Skyblock getSkyblock(final ServerPlayer player) {
+        return getSkyblock(player.getUUID());
     }
 
     public Skyblock getSkyblock(final Team team) {
@@ -128,12 +128,12 @@ public class Skyblocks extends PersistentState {
 
     public Skyblock createLobby() {
         final Skyblock lobby = createSkyblock(Util.NIL_UUID, "<lobby>", this.lobbyFile);
-        getWorld().setSpawnPos(lobby.getSpawnPos(), 0.0F);
+        getWorld().setDefaultSpawnPos(lobby.getSpawnPos(), 0.0F);
         return lobby;
     }
 
-    public Skyblock createSkyblock(final ServerPlayerEntity player) {
-        return createSkyblock(player.getUuid(), player.getEntityName(), this.skyblockFile);
+    public Skyblock createSkyblock(final ServerPlayer player) {
+        return createSkyblock(player.getUUID(), player.getScoreboardName(), this.skyblockFile);
     }
 
     public Skyblock createSkyblock(final Team team) {
@@ -145,19 +145,19 @@ public class Skyblocks extends PersistentState {
         final Skyblock skyblock = new Skyblock(this, uuid, name);
         skyblock.create(config);
         this.skyblocksByPlayer.put(uuid, skyblock);
-        markDirty();
+        setDirty();
         return skyblock;
     }
 
     @Override
-    public void fromTag(final CompoundTag tag) {
+    public void load(final CompoundTag tag) {
         this.skyblockPos.fromTag(tag.getCompound("skyblockPos"));
         this.lobbyFile = tag.getString("lobby");
         this.skyblockFile = tag.getString("skyblock");
 
         final Map<UUID, Skyblock> map = Maps.newConcurrentMap();
         final CompoundTag skyblocks = tag.getCompound("skyblocks");
-        skyblocks.getKeys().stream().forEach((key) -> {
+        skyblocks.getAllKeys().stream().forEach((key) -> {
             final UUID uuid = UUID.fromString(key);
             final Skyblock skyblock = new Skyblock(this, uuid);
             skyblock.fromTag(skyblocks.getCompound(key));
@@ -167,7 +167,7 @@ public class Skyblocks extends PersistentState {
     }
 
     @Override
-    public CompoundTag toTag(final CompoundTag tag) {
+    public CompoundTag save(final CompoundTag tag) {
         tag.put("skyblockPos", this.skyblockPos.toTag(new CompoundTag()));
         tag.putString("lobby", this.lobbyFile);
         tag.putString("skyblock", this.skyblockFile);

@@ -1,5 +1,8 @@
 ## Change Log
 
+### 0.0.4
+* (Internal) Change to Mojang Mappings (warjort)
+
 ### 0.0.3
 * Fix the validation of block ids instead of just creating air block for unknown blocks (warjort)
 * Try to improve the error handling for commands to stop crashing and Minecraft eating error messages (warjort)

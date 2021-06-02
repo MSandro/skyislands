@@ -19,29 +19,29 @@ package tatters.client;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.world.GeneratorType;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.chunk.ChunkGenerator;
-import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
-import net.minecraft.world.gen.chunk.FlatChunkGeneratorConfig;
+import net.minecraft.client.gui.screens.worldselection.WorldPreset;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
+import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorSettings;
 import tatters.TattersMain;
 import tatters.common.TattersChunkGenerator;
 
 @Environment(EnvType.CLIENT)
-public class TattersGeneratorType extends GeneratorType {
+public class TattersGeneratorType extends WorldPreset {
 
     public TattersGeneratorType() {
         super(TattersMain.MOD_ID);
     }
 
     @Override
-    protected ChunkGenerator getChunkGenerator(final Registry<Biome> biomeRegistry,
-            final Registry<ChunkGeneratorSettings> chunkGeneratorSettingsRegistry, final long seed) {
+    protected ChunkGenerator generator(final Registry<Biome> biomeRegistry,
+            final Registry<NoiseGeneratorSettings> chunkGeneratorSettingsRegistry, final long seed) {
         return new TattersChunkGenerator(getConfig(biomeRegistry));
     }
 
-    private static FlatChunkGeneratorConfig getConfig(final Registry<Biome> biomeRegistry) {
+    private static FlatLevelGeneratorSettings getConfig(final Registry<Biome> biomeRegistry) {
         return TattersChunkGenerator.createConfig(biomeRegistry);
     }
 }

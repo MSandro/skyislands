@@ -23,12 +23,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.BlockPos.MutableBlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockPos.Mutable;
-import net.minecraft.util.math.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import tatters.config.SkyblockBlockDefinition;
 import tatters.config.SkyblockConfig;
 
@@ -78,36 +78,36 @@ public class Skyblock {
         return tag;
     }
 
-    public boolean teleport(final ServerPlayerEntity player) {
-        if (!player.getServerWorld().equals(this.skyblocks.getWorld()))
+    public boolean teleport(final ServerPlayer player) {
+        if (!player.getLevel().equals(this.skyblocks.getWorld()))
             return false;
 
-        if (player.hasVehicle()) {
+        if (player.isPassenger()) {
             player.stopRiding();
         }
-        player.requestTeleport(this.spawnPos.getX() + 0.5d, this.spawnPos.getY(), this.spawnPos.getZ() + 0.5d);
+        player.teleportTo(this.spawnPos.getX() + 0.5d, this.spawnPos.getY(), this.spawnPos.getZ() + 0.5d);
         return true;
     }
 
-    public void setPlayerSpawn(final ServerPlayerEntity player) {
-        player.setSpawnPoint(this.skyblocks.getWorld().getRegistryKey(), getSpawnPos(), 0.0F, true, true);
+    public void setPlayerSpawn(final ServerPlayer player) {
+        player.setRespawnPosition(this.skyblocks.getWorld().dimension(), getSpawnPos(), 0.0F, true, true);
     }
 
     public void create(final SkyblockConfig config) {
         try {
             final SkyblockPos skyblockPos = this.skyblocks.getSkyblockPos();
-            final Mutable startPos = skyblockPos.getPos().mutableCopy();
+            final MutableBlockPos startPos = skyblockPos.getPos().mutable();
             skyblockPos.nextPos();
-            this.skyblocks.markDirty();
+            this.skyblocks.setDirty();
 
-            final ServerWorld world = this.skyblocks.getWorld();
+            final ServerLevel world = this.skyblocks.getWorld();
             final List<List<String>> layers = config.layers;
             final Map<Character, SkyblockBlockDefinition> mapping = config.mapping;
-            final Mutable layerPos = startPos.mutableCopy();
+            final MutableBlockPos layerPos = startPos.mutable();
             for (List<String> layer : layers) {
-                final Mutable rowPos = layerPos.east(layer.size()/2).mutableCopy(); 
+                final MutableBlockPos rowPos = layerPos.east(layer.size()/2).mutable(); 
                 for (String row : layer) {
-                    final Mutable columnPos = rowPos.north(row.length()/2).mutableCopy();
+                    final MutableBlockPos columnPos = rowPos.north(row.length()/2).mutable();
                     row.chars().forEach(c -> {
                         final Character key = (char) c;
                         final SkyblockBlockDefinition definition = mapping.getOrDefault(key, SkyblockBlockDefinition.AIR);
@@ -116,7 +116,7 @@ public class Skyblock {
                             if (this.spawnPos != null) {
                                 log.warn("Duplicate spawn points defined for " + config.name);
                             } else {
-                                this.spawnPos = columnPos.toImmutable();
+                                this.spawnPos = columnPos.immutable();
                             }
                         }
                         columnPos.move(Direction.SOUTH);
@@ -126,7 +126,7 @@ public class Skyblock {
                 layerPos.move(Direction.UP);
             }
             if (this.spawnPos == null) {
-                this.spawnPos = startPos.up(layers.size()).toImmutable();
+                this.spawnPos = startPos.above(layers.size()).immutable();
             }
         }
         catch (RuntimeException e) {

@@ -19,10 +19,10 @@ package tatters.config;
 
 import java.util.Optional;
 
-import net.minecraft.block.Block;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.gen.chunk.FlatChunkGeneratorLayer;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.flat.FlatLayerInfo;
 
 public class SkyblockFillerDefinition {
 
@@ -44,16 +44,16 @@ public class SkyblockFillerDefinition {
         }
     }
 
-    public FlatChunkGeneratorLayer getChunkGeneratorLayer() {
-        return new FlatChunkGeneratorLayer(this.thickness, parseBlock());
+    public FlatLayerInfo getChunkGeneratorLayer() {
+        return new FlatLayerInfo(this.thickness, parseBlock());
     }
 
     private Block parseBlock() {
         if (this.block == null)
             throw new IllegalArgumentException("Null block");
         if (this.theBlock == null) {
-            final Identifier identifier = new Identifier(this.block);
-            final Optional<Block> blockTest = blocks.getOrEmpty(identifier);
+            final ResourceLocation identifier = new ResourceLocation(this.block);
+            final Optional<Block> blockTest = blocks.getOptional(identifier);
             if (!blockTest.isPresent()) {
                 throw new IllegalArgumentException("Unknown block: " + identifier);
             }

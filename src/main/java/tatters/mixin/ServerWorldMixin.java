@@ -24,35 +24,35 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import tatters.TattersMain;
 import tatters.common.Skyblocks;
 
-@Mixin(ServerWorld.class)
+@Mixin(ServerLevel.class)
 public class ServerWorldMixin {
 
     @Final
     @Shadow
-    private boolean inEntityTick;
+    private boolean tickingEntities;
 
-    @Inject(method = "loadEntityUnchecked", at = @At("TAIL"))
+    @Inject(method = "add", at = @At("TAIL"))
     private void tatters_onServerEntityLoad(final Entity entity, final CallbackInfo ci) {
-        if (this.inEntityTick) {
+        if (this.tickingEntities) {
             return;
         }
-        if (entity instanceof ServerPlayerEntity == false)
+        if (entity instanceof ServerPlayer == false)
             return;
-        final ServerPlayerEntity player = (ServerPlayerEntity) entity;
-        final ServerWorld world = (ServerWorld) (Object) this;
+        final ServerPlayer player = (ServerPlayer) entity;
+        final ServerLevel world = (ServerLevel) (Object) this;
         if (!TattersMain.isTattersWorld(world))
             return;
         tatters_onServerPlayerLoad(player, world);
     }
 
     // Separate method to try to avoid the config referenced in Skyblocks getting loaded when not needed
-    private static void tatters_onServerPlayerLoad(final ServerPlayerEntity player, final ServerWorld world) {
+    private static void tatters_onServerPlayerLoad(final ServerPlayer player, final ServerLevel world) {
         Skyblocks.onServerPlayerLoad(player, world);
     }
 }

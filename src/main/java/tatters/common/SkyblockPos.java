@@ -17,8 +17,8 @@
  */
 package tatters.common;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.math.BlockPos;
 
 public class SkyblockPos {
 

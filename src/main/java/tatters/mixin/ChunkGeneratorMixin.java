@@ -22,8 +22,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.gen.chunk.ChunkGenerator;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import tatters.TattersMain;
 import tatters.common.TattersChunkGenerator;
 

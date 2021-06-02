@@ -22,18 +22,18 @@ import java.util.Optional;
 
 import com.mojang.brigadier.StringReader;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.StringNbtReader;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.Property;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.nbt.TagParser;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.Property;
 
 public class SkyblockBlockDefinition {
 
@@ -53,7 +53,7 @@ public class SkyblockBlockDefinition {
     }
 
     public SkyblockBlockDefinition(final Block block) {
-        this.blockState = block.getDefaultState();
+        this.blockState = block.defaultBlockState();
     }
 
     public void validate() {
@@ -61,10 +61,10 @@ public class SkyblockBlockDefinition {
         parseNBT();
     }
 
-    public void placeBlock(final ServerWorld world, final BlockPos pos) {
+    public void placeBlock(final ServerLevel world, final BlockPos pos) {
         try {
             parseBlockState();
-            world.setBlockState(pos.toImmutable(), this.blockState);
+            world.setBlockAndUpdate(pos.immutable(), this.blockState);
             if (this.nbt != null) {
                 final BlockEntity blockEntity = world.getBlockEntity(pos);
                 if (blockEntity == null)
@@ -73,8 +73,8 @@ public class SkyblockBlockDefinition {
                 tag.putInt("x", pos.getX());
                 tag.putInt("y", pos.getY());
                 tag.putInt("z", pos.getZ());
-                blockEntity.fromTag(this.blockState, tag);
-                blockEntity.markDirty();
+                blockEntity.load(this.blockState, tag);
+                blockEntity.setChanged();
             }
         } catch (Exception e) {
             throw new RuntimeException("Error placing block: " + this.block, e);
@@ -85,16 +85,16 @@ public class SkyblockBlockDefinition {
         if (this.blockState != null) {
             return;
         }
-        final Identifier identifier = new Identifier(this.block);
-        final Optional<Block> blockTest = blocks.getOrEmpty(identifier);
+        final ResourceLocation identifier = new ResourceLocation(this.block);
+        final Optional<Block> blockTest = blocks.getOptional(identifier);
         if (!blockTest.isPresent()) {
             throw new IllegalArgumentException("Unknown block: " + identifier);
         }
         final Block block = blockTest.get();
-        this.blockState = block.getDefaultState();
+        this.blockState = block.defaultBlockState();
         if (this.properties != null) {
             try {
-                final StateManager<Block, BlockState> stateManager = block.getStateManager();
+                final StateDefinition<Block, BlockState> stateManager = block.getStateDefinition();
                 this.properties.forEach((name, value) -> {
                     final Property<?> property = stateManager.getProperty(name);
                     if (property == null) {
@@ -110,9 +110,9 @@ public class SkyblockBlockDefinition {
     }
 
     private <T extends Comparable<T>> void parsePropertyValue(final Property<T> property, final String value) {
-        final Optional<T> optional = property.parse(value);
+        final Optional<T> optional = property.getValue(value);
         if (optional.isPresent()) {
-            this.blockState = this.blockState.with(property, optional.get());
+            this.blockState = this.blockState.setValue(property, optional.get());
         } else {
             throw new IllegalArgumentException("Invalid value: " + value + " for property " + property.getName() + " of " + this.block); 
         }
@@ -123,7 +123,7 @@ public class SkyblockBlockDefinition {
             return null;
         }
         try {
-            return new StringNbtReader(new StringReader(this.nbt)).parseCompoundTag();
+            return new TagParser(new StringReader(this.nbt)).readStruct();
         } catch (Exception e) {
             throw new RuntimeException("Error parsing nbt for " + this.block, e);
         }

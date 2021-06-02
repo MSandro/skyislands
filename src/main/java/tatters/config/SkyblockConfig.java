@@ -32,7 +32,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-import net.minecraft.world.gen.chunk.FlatChunkGeneratorLayer;
+import net.minecraft.world.level.levelgen.flat.FlatLayerInfo;
 import tatters.TattersMain;
 
 public class SkyblockConfig extends Config {
@@ -101,8 +101,8 @@ public class SkyblockConfig extends Config {
         }
     }
 
-    public List<FlatChunkGeneratorLayer> getFiller() {
-        List<FlatChunkGeneratorLayer> result = Lists.newArrayList();
+    public List<FlatLayerInfo> getFiller() {
+        final List<FlatLayerInfo> result = Lists.newArrayList();
         if (this.fillers != null) {
             this.fillers.forEach(filler -> result.add(filler.getChunkGeneratorLayer()));
         }

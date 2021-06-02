@@ -26,20 +26,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.brigadier.CommandDispatcher;
 
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.CommandManager.RegistrationEnvironment;
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.Commands.CommandSelection;
 import tatters.common.TattersCommand;
 
-@Mixin(CommandManager.class)
+@Mixin(Commands.class)
 public class CommandManagerMixin {
 
     @Final
     @Shadow
-    private CommandDispatcher<ServerCommandSource> dispatcher;
+    private CommandDispatcher<CommandSourceStack> dispatcher;
 
     @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lcom/mojang/brigadier/CommandDispatcher;findAmbiguities(Lcom/mojang/brigadier/AmbiguityConsumer;)V"))
-    private void tatters_registerCommands(final RegistrationEnvironment environment, final CallbackInfo ci) {
+    private void tatters_registerCommands(final CommandSelection environment, final CallbackInfo ci) {
         TattersCommand.register(this.dispatcher);
     }
 }

@@ -26,24 +26,24 @@ import com.mojang.serialization.Codec;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeKeys;
-import net.minecraft.world.gen.chunk.ChunkGenerator;
-import net.minecraft.world.gen.chunk.FlatChunkGenerator;
-import net.minecraft.world.gen.chunk.FlatChunkGeneratorConfig;
-import net.minecraft.world.gen.chunk.FlatChunkGeneratorLayer;
-import net.minecraft.world.gen.chunk.StructuresConfig;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.FlatLevelSource;
+import net.minecraft.world.level.levelgen.StructureSettings;
+import net.minecraft.world.level.levelgen.flat.FlatLayerInfo;
+import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorSettings;
 import tatters.TattersMain;
 import tatters.config.SkyblockConfig;
 import tatters.config.TattersConfig;
 
-public class TattersChunkGenerator extends FlatChunkGenerator implements TattersFlatChunkGenerator {
+public class TattersChunkGenerator extends FlatLevelSource implements TattersFlatChunkGenerator {
 
     public static final Codec<TattersChunkGenerator> CODEC;
 
-    public static FlatChunkGeneratorConfig createConfig(final Registry<Biome> biomeRegistry) {
-        List<FlatChunkGeneratorLayer> layers = Lists.newArrayList();
+    public static FlatLevelGeneratorSettings createConfig(final Registry<Biome> biomeRegistry) {
+        List<FlatLayerInfo> layers = Lists.newArrayList();
         try {
             final TattersConfig config = TattersConfig.getConfig();
             final SkyblockConfig lobby = config.getLobbyConfig();
@@ -52,12 +52,12 @@ public class TattersChunkGenerator extends FlatChunkGenerator implements Tatters
         catch (Throwable e) {
             TattersMain.log.warn("Error reading config", e);
         }
-        final StructuresConfig structuresConfig = new StructuresConfig(Optional.empty(), Collections.emptyMap());
-        final Biome biome = biomeRegistry.getOrThrow(BiomeKeys.PLAINS);
-        return new FlatChunkGeneratorConfig(biomeRegistry, structuresConfig, layers, false, false, Optional.of(() -> biome));
+        final StructureSettings structuresConfig = new StructureSettings(Optional.empty(), Collections.emptyMap());
+        final Biome biome = biomeRegistry.get(Biomes.PLAINS);
+        return new FlatLevelGeneratorSettings(biomeRegistry, structuresConfig, layers, false, false, Optional.of(() -> biome));
     }
 
-    public TattersChunkGenerator(final FlatChunkGeneratorConfig config) {
+    public TattersChunkGenerator(final FlatLevelGeneratorSettings config) {
         super(config);
     }
 
@@ -65,17 +65,17 @@ public class TattersChunkGenerator extends FlatChunkGenerator implements Tatters
     public void updateConfig() {
         final TattersConfig config = TattersConfig.getConfig();
         final SkyblockConfig lobby = config.getLobbyConfig();
-        final StructuresConfig structuresConfig = new StructuresConfig(Optional.empty(), Collections.emptyMap());
-        final List<FlatChunkGeneratorLayer> layers = lobby.getFiller();
-        tattersSetConfig(getConfig().method_29965(layers, structuresConfig));
+        final StructureSettings structuresConfig = new StructureSettings(Optional.empty(), Collections.emptyMap());
+        final List<FlatLayerInfo> layers = lobby.getFiller();
+        tattersSetConfig(settings().withLayers(layers, structuresConfig));
     }
 
     @Override
-    protected Codec<? extends ChunkGenerator> getCodec() {
+    protected Codec<? extends ChunkGenerator> codec() {
        return CODEC;
     }
 
     static {
-       CODEC = FlatChunkGeneratorConfig.CODEC.fieldOf("settings").xmap(TattersChunkGenerator::new, TattersChunkGenerator::getConfig).codec();
+       CODEC = FlatLevelGeneratorSettings.CODEC.fieldOf("settings").xmap(TattersChunkGenerator::new, TattersChunkGenerator::settings).codec();
     }
 }

@@ -23,8 +23,8 @@ import org.apache.logging.log4j.Logger;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 import tatters.common.TattersChunkGenerator;
 
 public class TattersMain implements ModInitializer {
@@ -32,12 +32,12 @@ public class TattersMain implements ModInitializer {
     public static final Logger log = LogManager.getLogger();
     public static String MOD_ID = "tatters";
 
-    public static boolean isTattersWorld(final World world) {
-        if (world instanceof ServerWorld == false)
+    public static boolean isTattersWorld(final Level world) {
+        if (world instanceof ServerLevel == false)
             return false;
-        final ServerWorld serverWorld = (ServerWorld) world;
-        return serverWorld.getChunkManager().getChunkGenerator() instanceof TattersChunkGenerator 
-                && world.getRegistryKey().equals(World.OVERWORLD);
+        final ServerLevel serverWorld = (ServerLevel) world;
+        return serverWorld.getChunkSource().getGenerator() instanceof TattersChunkGenerator
+                && world.dimension().equals(Level.OVERWORLD);
     }
 
     public static ModContainer getModContainer() {

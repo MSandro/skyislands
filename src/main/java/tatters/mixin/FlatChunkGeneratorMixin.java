@@ -21,19 +21,19 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 
-import net.minecraft.world.gen.chunk.FlatChunkGenerator;
-import net.minecraft.world.gen.chunk.FlatChunkGeneratorConfig;
+import net.minecraft.world.level.levelgen.FlatLevelSource;
+import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorSettings;
 import tatters.common.TattersFlatChunkGenerator;
 
-@Mixin(FlatChunkGenerator.class)
+@Mixin(FlatLevelSource.class)
 public class FlatChunkGeneratorMixin implements TattersFlatChunkGenerator {
 
     @Mutable
     @Shadow
-    private FlatChunkGeneratorConfig config;
+    private FlatLevelGeneratorSettings settings;
 
     @Override
-    public void tattersSetConfig(final FlatChunkGeneratorConfig config) {
-        this.config = config;
+    public void tattersSetConfig(final FlatLevelGeneratorSettings config) {
+        this.settings = config;
     }
 }

@@ -31,27 +31,27 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.google.common.collect.Maps;
 
-import net.minecraft.client.world.GeneratorType;
+import net.minecraft.client.gui.screens.worldselection.WorldPreset;
 import tatters.client.TattersGeneratorType;
 import tatters.client.TattersLevelScreen;
 
-@Mixin(GeneratorType.class)
+@Mixin(WorldPreset.class)
 public class GeneratorTypeMixin {
 
     @Final
     @Shadow
-    protected static List<GeneratorType> VALUES;
+    protected static List<WorldPreset> PRESETS;
 
     @Mutable
     @Shadow
-    protected static Map<Optional<GeneratorType>, GeneratorType.ScreenProvider> SCREEN_PROVIDERS;
+    protected static Map<Optional<WorldPreset>, WorldPreset.PresetEditor> EDITORS;
 
     @Inject(method = "<clinit>", at = @At("TAIL"))
     private static void tatters_clinit(final CallbackInfo callback) {
         final TattersGeneratorType tattersGenerator = new TattersGeneratorType();
-        VALUES.add(1, tattersGenerator);
-        SCREEN_PROVIDERS = Maps.newHashMap(SCREEN_PROVIDERS);
-        SCREEN_PROVIDERS.put(Optional.of(tattersGenerator), (screen, generatorOptions) -> {
+        PRESETS.add(1, tattersGenerator);
+        EDITORS = Maps.newHashMap(EDITORS);
+        EDITORS.put(Optional.of(tattersGenerator), (screen, generatorOptions) -> {
             return new TattersLevelScreen(screen, generatorOptions);
         });
     }
