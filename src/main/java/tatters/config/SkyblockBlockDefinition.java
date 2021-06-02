@@ -90,11 +90,11 @@ public class SkyblockBlockDefinition {
         if (!blockTest.isPresent()) {
             throw new IllegalArgumentException("Unknown block: " + identifier);
         }
-        final Block block = blockTest.get();
-        this.blockState = block.defaultBlockState();
+        final Block testBlock = blockTest.get();
+        this.blockState = testBlock.defaultBlockState();
         if (this.properties != null) {
             try {
-                final StateDefinition<Block, BlockState> stateManager = block.getStateDefinition();
+                final StateDefinition<Block, BlockState> stateManager = testBlock.getStateDefinition();
                 this.properties.forEach((name, value) -> {
                     final Property<?> property = stateManager.getProperty(name);
                     if (property == null) {

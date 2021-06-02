@@ -126,6 +126,7 @@ public class Skyblocks extends SavedData {
         return this.skyblocksByPlayer.get(uuid);
     }
 
+    @SuppressWarnings("resource")
     public Skyblock createLobby() {
         final Skyblock lobby = createSkyblock(Util.NIL_UUID, "<lobby>", this.lobbyFile);
         getWorld().setDefaultSpawnPos(lobby.getSpawnPos(), 0.0F);

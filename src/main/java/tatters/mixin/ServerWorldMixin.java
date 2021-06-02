@@ -37,6 +37,7 @@ public class ServerWorldMixin {
     @Shadow
     private boolean tickingEntities;
 
+    @SuppressWarnings("resource")
     @Inject(method = "add", at = @At("TAIL"))
     private void tatters_onServerEntityLoad(final Entity entity, final CallbackInfo ci) {
         if (this.tickingEntities) {

@@ -40,6 +40,7 @@ import tatters.config.TattersConfig;
 
 public class TattersChunkGenerator extends FlatLevelSource implements TattersFlatChunkGenerator {
 
+    @SuppressWarnings("hiding")
     public static final Codec<TattersChunkGenerator> CODEC;
 
     public static FlatLevelGeneratorSettings createConfig(final Registry<Biome> biomeRegistry) {

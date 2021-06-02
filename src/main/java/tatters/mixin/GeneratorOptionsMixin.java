@@ -45,6 +45,7 @@ import tatters.common.TattersChunkGenerator;
 @Mixin(WorldGenSettings.class)
 public class GeneratorOptionsMixin {
 
+    @SuppressWarnings("boxing")
     @Inject(method = "create", at = @At("HEAD"), cancellable = true)
     private static void tattersGeneratorOptions(final RegistryAccess dynamicRegistryManager, final Properties properties, final CallbackInfoReturnable<WorldGenSettings> ci) {
         String levelType = (String) properties.get("level-type");

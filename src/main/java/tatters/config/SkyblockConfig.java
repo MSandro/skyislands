@@ -58,6 +58,7 @@ public class SkyblockConfig extends Config {
     public final String fillersComment = "list of block and thickness (default 1)";
     public List<SkyblockFillerDefinition> fillers;
 
+    @SuppressWarnings("boxing")
     public void validate() {
         if (!this.enabled)
             return;

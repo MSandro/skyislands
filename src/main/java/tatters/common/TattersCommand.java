@@ -151,6 +151,7 @@ public class TattersCommand {
         }
     }
 
+    @SuppressWarnings("resource")
     public static int team(final CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         try {
             final Skyblocks skyblocks = getSkyblocks(context);
@@ -170,6 +171,7 @@ public class TattersCommand {
         }
     }
 
+    @SuppressWarnings("resource")
     public static Skyblocks getSkyblocks(final CommandContext<CommandSourceStack> context)
             throws CommandSyntaxException {
         final Skyblocks skyblocks = Skyblocks.getSkyblocks(context.getSource().getLevel());

@@ -32,6 +32,7 @@ public class TattersMain implements ModInitializer {
     public static final Logger log = LogManager.getLogger();
     public static String MOD_ID = "tatters";
 
+    @SuppressWarnings("resource")
     public static boolean isTattersWorld(final Level world) {
         if (world instanceof ServerLevel == false)
             return false;

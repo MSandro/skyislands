@@ -128,6 +128,7 @@ public class TattersLevelScreen extends Screen {
         final boolean includeNone;
         SkyblockConfig selection;
 
+        @SuppressWarnings("synthetic-access")
         private SkyblockListWidget(final SkyblockConfig selection, final boolean includeNone, final int left) {
             super(TattersLevelScreen.this.minecraft, TattersLevelScreen.this.width / 2, TattersLevelScreen.this.height,
                     40, TattersLevelScreen.this.height - 37, 16);
@@ -183,6 +184,7 @@ public class TattersLevelScreen extends Screen {
                 }
             }
 
+            @SuppressWarnings("synthetic-access")
             @Override
             public void render(PoseStack matrices, int index, int y, int x, int entryWidth, int entryHeight,
                     int mouseX, int mouseY, boolean hovered, float tickDelta) {

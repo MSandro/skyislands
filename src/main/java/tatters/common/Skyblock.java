@@ -78,6 +78,7 @@ public class Skyblock {
         return tag;
     }
 
+    @SuppressWarnings("resource")
     public boolean teleport(final ServerPlayer player) {
         if (!player.getLevel().equals(this.skyblocks.getWorld()))
             return false;
@@ -89,10 +90,12 @@ public class Skyblock {
         return true;
     }
 
+    @SuppressWarnings("resource")
     public void setPlayerSpawn(final ServerPlayer player) {
         player.setRespawnPosition(this.skyblocks.getWorld().dimension(), getSpawnPos(), 0.0F, true, true);
     }
 
+    @SuppressWarnings({ "resource", "boxing" })
     public void create(final SkyblockConfig config) {
         try {
             final SkyblockPos skyblockPos = this.skyblocks.getSkyblockPos();
