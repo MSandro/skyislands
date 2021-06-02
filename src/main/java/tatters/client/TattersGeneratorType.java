@@ -41,7 +41,7 @@ public class TattersGeneratorType extends GeneratorType {
         return new TattersChunkGenerator(getConfig(biomeRegistry));
     }
 
-    protected FlatChunkGeneratorConfig getConfig(final Registry<Biome> biomeRegistry) {
+    private static FlatChunkGeneratorConfig getConfig(final Registry<Biome> biomeRegistry) {
         return TattersChunkGenerator.createConfig(biomeRegistry);
     }
 }

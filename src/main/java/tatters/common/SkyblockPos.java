@@ -33,7 +33,7 @@ public class SkyblockPos {
     private int z = 0;
 
     // Used to put skblocks in the centre of a chunk
-    public int centre(final int original) {
+    public static int centre(final int original) {
         return 8 + 16 * (original / 16);
     }
 

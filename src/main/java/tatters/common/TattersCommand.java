@@ -69,12 +69,10 @@ public class TattersCommand {
             if (TattersConfig.reload(false)) {
                 feedback(context, "tatters.command.reloaded");
                 return Command.SINGLE_SUCCESS;
-            } else {
-                feedback(context, "tatters.command.error");
-                return 0;
             }
-        }
-        catch (Exception e) {
+            feedback(context, "tatters.command.error");
+            return 0;
+        } catch (Exception e) {
             throw handleError(e);
         }
     }

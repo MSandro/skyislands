@@ -47,5 +47,6 @@ public class TattersMain implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        // nothing
     }
 }

@@ -84,7 +84,7 @@ public class Skyblocks extends PersistentState {
         }
     }
 
-    private WeakReference<ServerWorld> worldRef = new WeakReference<ServerWorld>(null);
+    private WeakReference<ServerWorld> worldRef = new WeakReference<>(null);
 
     private String lobbyFile;
 
@@ -123,7 +123,7 @@ public class Skyblocks extends PersistentState {
     }
 
     public Skyblock getSkyblock(final UUID uuid) {
-        return skyblocksByPlayer.get(uuid);
+        return this.skyblocksByPlayer.get(uuid);
     }
 
     public Skyblock createLobby() {
@@ -169,8 +169,8 @@ public class Skyblocks extends PersistentState {
     @Override
     public CompoundTag toTag(final CompoundTag tag) {
         tag.put("skyblockPos", this.skyblockPos.toTag(new CompoundTag()));
-        tag.putString("lobby", lobbyFile);
-        tag.putString("skyblock", skyblockFile);
+        tag.putString("lobby", this.lobbyFile);
+        tag.putString("skyblock", this.skyblockFile);
         
         final CompoundTag skyblocks = new CompoundTag();
         this.skyblocksByPlayer.forEach((uuid, skyblock) -> {

@@ -53,7 +53,7 @@ public class SkyblockBlockDefinition {
     }
 
     public SkyblockBlockDefinition(final Block block) {
-        blockState = block.getDefaultState();
+        this.blockState = block.getDefaultState();
     }
 
     public void validate() {
@@ -68,7 +68,7 @@ public class SkyblockBlockDefinition {
             if (this.nbt != null) {
                 final BlockEntity blockEntity = world.getBlockEntity(pos);
                 if (blockEntity == null)
-                    throw new IllegalArgumentException(this.block + " has no block entity for nbt: " + nbt);
+                    throw new IllegalArgumentException(this.block + " has no block entity for nbt: " + this.nbt);
                 final CompoundTag tag = parseNBT();
                 tag.putInt("x", pos.getX());
                 tag.putInt("y", pos.getY());

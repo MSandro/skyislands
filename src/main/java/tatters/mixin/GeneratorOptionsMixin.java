@@ -56,21 +56,21 @@ public class GeneratorOptionsMixin {
             return;
         properties.put("level-type", levelType);
 
-        final String levelSeed = (String) MoreObjects.firstNonNull((String)properties.get("level-seed"), "");
+        final String levelSeed = MoreObjects.firstNonNull((String)properties.get("level-seed"), "");
         properties.put("level-seed", levelSeed);
         long seed = (new Random()).nextLong();
         if (!levelSeed.isEmpty()) {
-           try {
-              long parsedSeed = Long.parseLong(levelSeed);
-              if (parsedSeed != 0L) {
-                 seed = parsedSeed;
-              }
-           } catch (NumberFormatException ignored) {
-              seed = (long) levelSeed.hashCode();
-           }
+            try {
+                long parsedSeed = Long.parseLong(levelSeed);
+                if (parsedSeed != 0L) {
+                    seed = parsedSeed;
+                }
+             } catch (@SuppressWarnings("unused") NumberFormatException ignored) {
+                 seed = levelSeed.hashCode();
+             }
         }
 
-        final String generatorSettings = (String) MoreObjects.firstNonNull((String) properties.get("generator-settings"), "");
+        final String generatorSettings = MoreObjects.firstNonNull((String) properties.get("generator-settings"), "");
         properties.put("generator-settings", generatorSettings);
         final String genStructures = (String) properties.get("generate-structures");
         final boolean generateStructures = genStructures == null || Boolean.parseBoolean(genStructures);

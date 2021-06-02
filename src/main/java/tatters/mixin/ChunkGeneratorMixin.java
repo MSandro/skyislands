@@ -32,6 +32,6 @@ public class ChunkGeneratorMixin {
 
     @Inject(method = "<clinit>", at = @At("HEAD"))
     private static void tatters_clinit(final CallbackInfo callback) {
-        Registry.register(Registry.CHUNK_GENERATOR, (String)TattersMain.MOD_ID, TattersChunkGenerator.CODEC);
+        Registry.register(Registry.CHUNK_GENERATOR, TattersMain.MOD_ID, TattersChunkGenerator.CODEC);
     }
 }

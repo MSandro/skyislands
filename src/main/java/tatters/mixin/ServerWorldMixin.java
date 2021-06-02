@@ -52,7 +52,7 @@ public class ServerWorldMixin {
     }
 
     // Separate method to try to avoid the config referenced in Skyblocks getting loaded when not needed
-    private void tatters_onServerPlayerLoad(final ServerPlayerEntity player, final ServerWorld world) {
+    private static void tatters_onServerPlayerLoad(final ServerPlayerEntity player, final ServerWorld world) {
         Skyblocks.onServerPlayerLoad(player, world);
     }
 }

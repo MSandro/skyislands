@@ -56,10 +56,12 @@ public class TattersLevelScreen extends Screen {
         this.generatorOptions = generatorOptions;
     }
 
+    @Override
     public void onClose() {
-        this.client.openScreen(parent);
+        this.client.openScreen(this.parent);
     }
 
+    @Override
     protected void init() {
         // Ensure configuration is up-to-date with file system
         TattersConfig config;
@@ -88,7 +90,7 @@ public class TattersLevelScreen extends Screen {
                                 : this.lobbySelectionList.selection.fileName;
                         tattersConfig.skyblock = this.skyblockSelectionList.selection.fileName;
                         tattersConfig.save();
-                        final TattersChunkGenerator generator = (TattersChunkGenerator) generatorOptions.getChunkGenerator();
+                        final TattersChunkGenerator generator = (TattersChunkGenerator) this.generatorOptions.getChunkGenerator();
                         generator.updateConfig();
                     }
                     catch (Throwable e) {
@@ -109,6 +111,7 @@ public class TattersLevelScreen extends Screen {
         this.confirmButton.active = this.skyblockSelectionList.getSelected() != null;
     }
 
+    @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackgroundTexture(0);
         this.lobbySelectionList.render(matrices, mouseX, mouseY, delta);
@@ -139,10 +142,12 @@ public class TattersLevelScreen extends Screen {
             });
         }
 
+        @Override
         protected boolean isFocused() {
             return TattersLevelScreen.this.getFocused() == this;
         }
 
+        @Override
         public void setSelected(final SkyblockItem skyblockItem) {
             super.setSelected(skyblockItem);
             if (skyblockItem != null) {
@@ -158,8 +163,9 @@ public class TattersLevelScreen extends Screen {
         }
 
         // Override wrong behaviour in parent class
+        @Override
         protected int getScrollbarPositionX() {
-           return this.left + this.width / 2 + 124;
+            return this.left + this.width / 2 + 124;
         }
 
         @Environment(EnvType.CLIENT)
@@ -177,33 +183,28 @@ public class TattersLevelScreen extends Screen {
                 }
             }
 
+            @Override
             public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight,
                     int mouseX, int mouseY, boolean hovered, float tickDelta) {
                 DrawableHelper.drawTextWithShadow(matrices, TattersLevelScreen.this.textRenderer, this.text, x + 5,
                         y + 2, this.skyblockConfig == SkyblockListWidget.this.selection ? 16777215 : 10526880);
             }
 
+            @Override
             public boolean mouseClicked(double mouseX, double mouseY, int button) {
                 if (button == 0) {
                     SkyblockListWidget.this.setSelected(this);
                     return true;
-                } else {
-                    return false;
-                }
+                } 
+                return false;
             }
         }
     }
 
     static boolean sameConfig(final SkyblockConfig one, final SkyblockConfig two) {
-        if (one == null && two == null) {
-            return true;
+        if (one == null) {
+            return two == null;
         }
-        if (one != null && two == null) {
-            return false;
-        }
-        if (one == null && two != null) {
-            return false;
-        }
-        return one.fileName.equals(two.fileName);
+        return two != null ?  one.fileName.equals(two.fileName) : false;
     }
 }

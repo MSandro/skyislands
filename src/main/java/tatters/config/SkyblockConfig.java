@@ -59,7 +59,7 @@ public class SkyblockConfig extends Config {
     public List<SkyblockFillerDefinition> fillers;
 
     public void validate() {
-        if (!enabled)
+        if (!this.enabled)
             return;
         final Set<Character> blockKeys = Sets.newHashSet();
         for (List<String> row : this.layers) {
@@ -96,8 +96,8 @@ public class SkyblockConfig extends Config {
             throw new IllegalArgumentException("Blocks have no mapping: " + blockKeys);
         }
 
-        if (fillers != null) {
-            fillers.stream().forEach((filler) -> filler.validate());
+        if (this.fillers != null) {
+            this.fillers.stream().forEach((filler) -> filler.validate());
         }
     }
 

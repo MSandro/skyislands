@@ -51,12 +51,12 @@ public class TattersConfig extends Config {
 
     private void validate() {
         if (this.spacing < 32)
-            throw new IllegalArgumentException(CONFIG_FILE_NAME + " spacing=" + spacing + " should be at least 32");
+            throw new IllegalArgumentException(CONFIG_FILE_NAME + " spacing=" + this.spacing + " should be at least 32");
         // TODO figure out a way to parameterise these values that works on 1.16 and 1.17 with the expanded block range
         if (this.defaultY < 1 || this.defaultY > 255)
-            throw new IllegalArgumentException(CONFIG_FILE_NAME + " defaultY=" + defaultY + " should be between 1 and 255");
+            throw new IllegalArgumentException(CONFIG_FILE_NAME + " defaultY=" + this.defaultY + " should be between 1 and 255");
         getSkyblockConfig();
-        if (this.lobby != null && !lobby.isEmpty()) {
+        if (this.lobby != null && !this.lobby.isEmpty()) {
             getLobbyConfig();
         }
     }
@@ -70,16 +70,18 @@ public class TattersConfig extends Config {
     }
 
     public SkyblockConfig getLobbyConfig(final boolean defaultSkyblock) {
-        if (this.lobby != null && !lobby.isEmpty()) {
+        if (this.lobby != null && !this.lobby.isEmpty()) {
             return SkyblockConfig.getSkyblockConfig(this.lobby);
         }
         return defaultSkyblock ? getSkyblockConfig() : null;
     }
 
+    @SuppressWarnings("static-method")
     public SkyblockConfig getSkyblockConfig(final String file) {
         return SkyblockConfig.getSkyblockConfig(file);
     }
 
+    @SuppressWarnings("static-method")
     public List<SkyblockConfig> getActiveSkyblockConfigs() {
         return SkyblockConfig.getActiveSkyblockConfigs();
     }

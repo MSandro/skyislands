@@ -70,6 +70,7 @@ public class TattersChunkGenerator extends FlatChunkGenerator implements Tatters
         tattersSetConfig(getConfig().method_29965(layers, structuresConfig));
     }
 
+    @Override
     protected Codec<? extends ChunkGenerator> getCodec() {
        return CODEC;
     }
