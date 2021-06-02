@@ -73,7 +73,7 @@ public class SkyblockBlockDefinition {
                 tag.putInt("x", pos.getX());
                 tag.putInt("y", pos.getY());
                 tag.putInt("z", pos.getZ());
-                blockEntity.load(this.blockState, tag);
+                blockEntity.load(tag);
                 blockEntity.setChanged();
             }
         } catch (Exception e) {

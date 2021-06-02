@@ -79,10 +79,10 @@ public class TattersLevelScreen extends Screen {
 
         this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
         this.lobbySelectionList = new SkyblockListWidget(config.getLobbyConfig(false), true, 0);
-        this.children.add(this.lobbySelectionList);
+        this.addWidget(this.lobbySelectionList);
         this.skyblockSelectionList = new SkyblockListWidget(config.getSkyblockConfig(), false, this.width / 2);
-        this.children.add(this.skyblockSelectionList);
-        this.confirmButton = this.addButton(
+        this.addWidget(this.skyblockSelectionList);
+        this.confirmButton = this.addRenderableWidget(
                 new Button(this.width / 2 - 155, this.height - 28, 150, 20, CommonComponents.GUI_DONE, (buttonWidget) -> {
                     try {
                         TattersConfig tattersConfig = TattersConfig.getConfig();
@@ -99,7 +99,7 @@ public class TattersLevelScreen extends Screen {
                     }
                     this.minecraft.setScreen(this.parent);
                 }));
-        this.addButton(
+        this.addRenderableWidget(
                 new Button(this.width / 2 + 5, this.height - 28, 150, 20, CommonComponents.GUI_CANCEL, (buttonWidget) -> {
                     this.minecraft.setScreen(this.parent);
                 }));
@@ -199,6 +199,11 @@ public class TattersLevelScreen extends Screen {
                     return true;
                 }
                 return false;
+            }
+
+            @Override
+            public Component getNarration() {
+                return TextComponent.EMPTY;
             }
         }
     }

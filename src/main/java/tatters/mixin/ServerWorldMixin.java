@@ -17,9 +17,7 @@
  */
 package tatters.mixin;
 
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -30,23 +28,16 @@ import net.minecraft.world.entity.Entity;
 import tatters.TattersMain;
 import tatters.common.Skyblocks;
 
-@Mixin(ServerLevel.class)
-public class ServerWorldMixin {
+@Mixin(targets="net/minecraft/server/level/ServerLevel$EntityCallbacks")
+abstract class ServerWorldMixin {
 
-    @Final
-    @Shadow
-    private boolean tickingEntities;
-
-    @SuppressWarnings("resource")
-    @Inject(method = "add", at = @At("TAIL"))
-    private void tatters_onServerEntityLoad(final Entity entity, final CallbackInfo ci) {
-        if (this.tickingEntities) {
-            return;
-        }
+    @SuppressWarnings({ "resource", "static-method" })
+    @Inject(method = "onTrackingStart(Lnet/minecraft/entity/Entity;)V", at = @At("TAIL"))
+    private void tatters_onCreated(final Entity entity, final CallbackInfo ci) {
         if (entity instanceof ServerPlayer == false)
             return;
         final ServerPlayer player = (ServerPlayer) entity;
-        final ServerLevel world = (ServerLevel) (Object) this;
+        final ServerLevel world = player.getLevel();
         if (!TattersMain.isTattersWorld(world))
             return;
         tatters_onServerPlayerLoad(player, world);

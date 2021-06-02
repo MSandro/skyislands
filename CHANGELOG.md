@@ -1,6 +1,7 @@
 ## Change Log
 
 ### 0.0.4
+* Port to 1.17 (warjort)
 * (Internal) Change to Mojang Mappings (warjort)
 
 ### 0.0.3

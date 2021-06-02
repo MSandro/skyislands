@@ -56,7 +56,7 @@ public class Skyblocks extends SavedData {
     private static Skyblocks getPersitantState(final ServerLevel world) {
         final DimensionDataStorage persistentStateManager = world.getDataStorage();
         // Load existing state
-        Skyblocks result = persistentStateManager.get(() -> new Skyblocks(), PERSISTANCE_ID);
+        Skyblocks result = persistentStateManager.get(Skyblocks::load, PERSISTANCE_ID);
         if (result != null) {
            return result;
         }
@@ -67,7 +67,7 @@ public class Skyblocks extends SavedData {
         result.skyblockPos.y = config.defaultY;
         result.lobbyFile = config.getLobbyConfig().fileName;
         result.skyblockFile = config.getSkyblockConfig().fileName;
-        persistentStateManager.set(result);
+        persistentStateManager.set(PERSISTANCE_ID, result);
         return result;
     }
 
@@ -95,7 +95,6 @@ public class Skyblocks extends SavedData {
     private Map<UUID, Skyblock> skyblocksByPlayer = Maps.newConcurrentMap();
 
     private Skyblocks() {
-        super(PERSISTANCE_ID);
     }
 
     public ServerLevel getWorld() {
@@ -150,21 +149,22 @@ public class Skyblocks extends SavedData {
         return skyblock;
     }
 
-    @Override
-    public void load(final CompoundTag tag) {
-        this.skyblockPos.fromTag(tag.getCompound("skyblockPos"));
-        this.lobbyFile = tag.getString("lobby");
-        this.skyblockFile = tag.getString("skyblock");
+    public static Skyblocks load(final CompoundTag tag) {
+        final Skyblocks result = new Skyblocks();
+        result.skyblockPos.fromTag(tag.getCompound("skyblockPos"));
+        result.lobbyFile = tag.getString("lobby");
+        result.skyblockFile = tag.getString("skyblock");
 
         final Map<UUID, Skyblock> map = Maps.newConcurrentMap();
         final CompoundTag skyblocks = tag.getCompound("skyblocks");
         skyblocks.getAllKeys().stream().forEach((key) -> {
             final UUID uuid = UUID.fromString(key);
-            final Skyblock skyblock = new Skyblock(this, uuid);
+            final Skyblock skyblock = new Skyblock(result, uuid);
             skyblock.fromTag(skyblocks.getCompound(key));
             map.put(uuid, skyblock);
         });
-        this.skyblocksByPlayer = map;
+        result.skyblocksByPlayer = map;
+        return result;
     }
 
     @Override

@@ -28,7 +28,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.FlatLevelSource;
 import net.minecraft.world.level.levelgen.StructureSettings;
@@ -54,8 +53,7 @@ public class TattersChunkGenerator extends FlatLevelSource implements TattersFla
             TattersMain.log.warn("Error reading config", e);
         }
         final StructureSettings structuresConfig = new StructureSettings(Optional.empty(), Collections.emptyMap());
-        final Biome biome = biomeRegistry.get(Biomes.PLAINS);
-        return new FlatLevelGeneratorSettings(biomeRegistry, structuresConfig, layers, false, false, Optional.of(() -> biome));
+        return new FlatLevelGeneratorSettings(structuresConfig, biomeRegistry).withLayers(layers, structuresConfig);
     }
 
     public TattersChunkGenerator(final FlatLevelGeneratorSettings config) {
