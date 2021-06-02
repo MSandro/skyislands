@@ -29,7 +29,7 @@ public class SkyblockFillerDefinition {
     private static Registry<Block> blocks = Registry.BLOCK;
 
     private transient Block theBlock;
-    
+
     public String block;
 
     public int thickness = 1;

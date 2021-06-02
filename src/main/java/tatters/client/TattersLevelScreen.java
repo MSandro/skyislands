@@ -195,7 +195,7 @@ public class TattersLevelScreen extends Screen {
                 if (button == 0) {
                     SkyblockListWidget.this.setSelected(this);
                     return true;
-                } 
+                }
                 return false;
             }
         }

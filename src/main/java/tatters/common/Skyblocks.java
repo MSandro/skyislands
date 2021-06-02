@@ -171,7 +171,7 @@ public class Skyblocks extends PersistentState {
         tag.put("skyblockPos", this.skyblockPos.toTag(new CompoundTag()));
         tag.putString("lobby", this.lobbyFile);
         tag.putString("skyblock", this.skyblockFile);
-        
+
         final CompoundTag skyblocks = new CompoundTag();
         this.skyblocksByPlayer.forEach((uuid, skyblock) -> {
             skyblocks.put(uuid.toString(), skyblock.toTag(new CompoundTag()));

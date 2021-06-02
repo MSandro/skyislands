@@ -35,7 +35,7 @@ import tatters.config.SkyblockConfig;
 public class Skyblock {
 
     private final Skyblocks skyblocks;
-    
+
     private final UUID uuid;
 
     private String name;

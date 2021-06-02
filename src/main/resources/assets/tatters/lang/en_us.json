@@ -9,10 +9,10 @@
   "tatters.command.help.5": "/tatters team <player> <team> - teleports the player to the team island, creates the island if needed and moves the player to the team",
   "tatters.command.help.6": "/tatters list - shows the claimed islands in the log",
   "tatters.command.help.7": "/tatters reload - reloads the config files",
-  "tatters.command.error": "Unexpected error, see the logs", 
+  "tatters.command.error": "Unexpected error, see the logs",
   "tatters.command.noskyblock": "Player does not have an island",
   "tatters.command.noteleport": "Cannot teleport players across worlds",
-  "tatters.command.reloaded": "Configuration reloaded", 
+  "tatters.command.reloaded": "Configuration reloaded",
   "tatters.command.wrongworld": "This is not a tatters world",
 
   "tatters.gui.error": "Error, see the logs",

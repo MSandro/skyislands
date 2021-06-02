@@ -49,7 +49,7 @@ public class SkyblockPos {
             this.z = -this.layer;
             return;
         }
-        // Iterate to the next x position if we are on a z edge 
+        // Iterate to the next x position if we are on a z edge
         if (this.x < this.layer && (this.z == this.layer || this.z == -this.layer)) {
             ++this.x;
             return;

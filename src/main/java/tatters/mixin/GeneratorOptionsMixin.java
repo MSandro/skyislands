@@ -45,8 +45,7 @@ import tatters.common.TattersChunkGenerator;
 @Mixin(GeneratorOptions.class)
 public class GeneratorOptionsMixin {
 
-    @Inject(method = "fromProperties", 
-            at = @At("HEAD"), cancellable = true) 
+    @Inject(method = "fromProperties", at = @At("HEAD"), cancellable = true)
     private static void tattersGeneratorOptions(final DynamicRegistryManager dynamicRegistryManager, final Properties properties, final CallbackInfoReturnable<GeneratorOptions> ci) {
         String levelType = (String) properties.get("level-type");
         if (levelType == null)
