@@ -27,11 +27,11 @@
   ],
 
   "depends": {
+    "fabric": "*",
     "fabricloader": "${loaderConstraint}",
     "minecraft": "${minecraftConstraint}"
   },
   "suggests": {
-    "fabric": "*"
   },
   "accessWidener": "tatters.accesswidener"
 }

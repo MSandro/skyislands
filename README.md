@@ -18,7 +18,7 @@
 * [Contributors](CONTRIBUTORS)
 
 ## About
-A skyblock mod for Fabric/Minecraft 1.16.5. With support for single player, server and team play using user defined skyblocks.
+A skyblock mod for Fabric/Minecraft. With support for single player, server and team play using user defined skyblocks.
 
 The name "Tatters" is a bad pun on the word "Fabric".
 
@@ -27,8 +27,6 @@ Tatters uses the notion of a lobby and satellite skyblocks. The skyblocks are on
 When the first person logs into a world, the lobby will be created at roughly 0,0. This is just a normal skyblock. The world spawn is set to the lobby's location.
 
 NOTE: The lobby is actually created at 8,8. Like all skyblocks, Tatters tries to place them in the centre of a chunk. 
-
-This mod technically doesn't need the fabric-api to run. But if you don't use it, you will have to use a resource pack to get the translations, including the default en-us.
 
 ## Solo
 To create a skyblock world in single player mode, use the "more options" button in the create new world screen and select world type "Sky Block".

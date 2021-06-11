@@ -40,7 +40,7 @@ import tatters.config.TattersConfig;
 
 public class TattersCommand {
 
-    public static void register(final CommandDispatcher<CommandSourceStack> dispatcher) {
+    public static void register(final CommandDispatcher<CommandSourceStack> dispatcher, final boolean dedicated) {
         dispatcher.register(literal(TattersMain.MOD_ID).requires((source) -> source.hasPermission(2))
                 .then(literal("help").executes(TattersCommand::help))
                 .then(literal("lobby").executes(TattersCommand::lobby))

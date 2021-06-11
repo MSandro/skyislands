@@ -5,10 +5,8 @@
   "compatibilityLevel": "JAVA_16",
   "mixins": [
     "ChunkGeneratorMixin",
-    "CommandManagerMixin",
     "FlatChunkGeneratorMixin",
-    "GeneratorOptionsMixin",
-    "ServerWorldMixin"
+    "GeneratorOptionsMixin"
   ],
   "client": [
     "GeneratorTypeMixin"

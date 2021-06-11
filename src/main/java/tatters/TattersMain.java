@@ -21,11 +21,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
+import tatters.common.Skyblocks;
 import tatters.common.TattersChunkGenerator;
+import tatters.common.TattersCommand;
 
 public class TattersMain implements ModInitializer {
 
@@ -48,6 +53,19 @@ public class TattersMain implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        // nothing
+        CommandRegistrationCallback.EVENT.register(TattersCommand::register);
+        ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
+            if (entity instanceof ServerPlayer == false)
+                return;
+            final ServerPlayer player = (ServerPlayer) entity;
+            if (!isTattersWorld(world))
+                return;
+            tatters_onServerPlayerLoad(player, world);
+        });
+    }
+
+    // Separate method to try to avoid the config referenced in Skyblocks getting loaded when not needed
+    private static void tatters_onServerPlayerLoad(final ServerPlayer player, final ServerLevel world) {
+        Skyblocks.onServerPlayerLoad(player, world);
     }
 }

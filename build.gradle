@@ -32,7 +32,7 @@ dependencies {
     minecraft "com.mojang:minecraft:$mcVersion"
     mappings loom.officialMojangMappings()
     modImplementation "net.fabricmc:fabric-loader:${loaderVersion}"
-    modRuntime "net.fabricmc.fabric-api:fabric-api:${apiVersion}"
+    modApi "net.fabricmc.fabric-api:fabric-api:${apiVersion}"
 }
 
 minecraft {

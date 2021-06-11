@@ -1,5 +1,8 @@
 ## Change Log
 
+### 1.1.0
+Update to use the Fabric API
+
 ### 1.0.0
 * Port to 1.17 (warjort)
 * (Internal) Change to Mojang Mappings (warjort)
