@@ -1,4 +1,4 @@
-# Tatters Skyblock
+# Sky Islands Generator
 [Curseforge](https://www.curseforge.com/minecraft/mc-mods/sky-island-generator-fabric)
 
 [Changelog](CHANGELOG.md)
