@@ -1,5 +1,5 @@
 # Tatters Skyblock
-[Curseforge](https://www.curseforge.com/minecraft/mc-mods/tatters-skyblock)
+[Curseforge](https://www.curseforge.com/minecraft/mc-mods/sky-island-generator-fabric)
 
 [Changelog](CHANGELOG.md)
 
@@ -20,13 +20,11 @@
 ## About
 A skyblock mod for Fabric/Minecraft. With support for single player, server and team play using user defined skyblocks.
 
-The name "Tatters" is a bad pun on the word "Fabric".
-
-Tatters uses the notion of a lobby and satellite skyblocks. The skyblocks are on a 1000x1000 grid by default.
+This mod uses the notion of a lobby and satellite skyblocks. The skyblocks are on a 1000x1000 grid by default.
 
 When the first person logs into a world, the lobby will be created at roughly 0,0. This is just a normal skyblock. The world spawn is set to the lobby's location.
 
-NOTE: The lobby is actually created at 8,8. Like all skyblocks, Tatters tries to place them in the centre of a chunk. 
+NOTE: The lobby is actually created at 8,8. Like all skyblocks, the mod tries to place them in the centre of a chunk. 
 
 ## Solo
 To create a skyblock world in single player mode, use the "more options" button in the create new world screen and select world type "Sky Block".
@@ -38,33 +36,31 @@ Click "Customize" to change the skyblock definition.
 Optionally you can also choose a lobby, but normally you would leave this as "--" in single player, meaning it will use the skyblock definition.
 
 ## Server
-To create a skyblock world for a server, change the "level-type" to "tatters" in server.properties.
-
 If you are just collaborating with friends, you can use the lobby as your skyblock.
 
-For a more public server, it is recommended to add a command block with a button to the lobby that runs the command "tatters home @p".
+For a more public server, it is recommended to add a command block with a button to the lobby that runs the command "skyislands home @p".
 <br> This will allow non-op users to create new islands and be teleported to them automatically.
 
-There is an example lobby skyblock in config/tatters/skyblock/example-lobby.json
+There is an example lobby skyblock in config/skyislands/skyblock/example-lobby.json
 
 ## Teams
 There is rudimentary support for teams. You first need to create your minecraft teams, e.g. "/team add teamName". 
 
-Then you can use the command "tatters team @p teamName" in a command block (one per team) to have players create and move to their team's skyblock.
+Then you can use the command "skyislands team @p teamName" in a command block (one per team) to have players create and move to their team's skyblock.
 
 ## Config
-The configuration file tatters.json can be found at mod-pack-root/config/tatters/tatters.json
+The configuration file skyislands.json can be found at mod-pack-root/config/skyislands/skyislands.json
 
 * spacing - this is the size of the skyblock grid, default 1000
 * defaultY - this is the height of the bottom block of the skyblocks, default 80
-* skyblock - the name of the skyblock definition file to use in mod-pack-root/config/tatters/skyblocks, default is "default.json"
+* skyblock - the name of the skyblock definition file to use in mod-pack-root/config/skyislands/skyblocks, default is "default.json"
 * lobby - the skyblock definition for the lobby, no value means to use the normal skyblock
 
 ## Skyblocks
 
-The skyblock definition files in mod-pack-root/config/tatters/skyblocks allow you to define your own skyblocks. 
+The skyblock definition files in mod-pack-root/config/skyislands/skyblocks allow you to define your own skyblocks. 
 
-Tatters has some predefined skyblocks:
+Sky-Islands has some predefined skyblocks:
 * default.json - a skyblock that should be familiar to modded players
 * traditional.json - more like the original vanilla skyblock
 * example-lobby.json - a simple (and garish) lobby with a command block to generate islands for players
@@ -117,9 +113,9 @@ Some technical notes:
 
 * An easy way to get the properties and nbt for a block is to setup what you want in game and then press F3+i. You can paste the result into a text file.
 * Any double quote " in the nbt value must be escaped as \\"
-* When you define the layers, you don't have to define all the air blocks around the edges. Tatters will try to centre the layers you define when they are smaller than other layers. For this reason is it useful to define your layers as an odd number of blocks to clearly state the centre.
+* When you define the layers, you don't have to define all the air blocks around the edges. Sky-Islands will try to centre the layers you define when they are smaller than other layers. For this reason is it useful to define your layers as an odd number of blocks to clearly state the centre.
 * You will need to define more air blocks around the edge if your design is not symmetrical, e.g. see traditional.json
-* An easy way to try your designs in game is to modify the file then use "/tatters regen @p" to force a new skyblock. Any errors will be in mod-pack-root/logs/latest.log
+* An easy way to try your designs in game is to modify the file then use "/skyislands regen @p" to force a new skyblock. Any errors will be in mod-pack-root/logs/latest.log
 * When the spawn point is not defined for a skyblock (using the ! character) it is calculated as the centre of the skyblock and 1 block above the top layer 
 
 The fillers have two elements, they are applied from the bottom of the world
@@ -139,12 +135,12 @@ This is an example from the stone configuration:
 NOTE: when using fillers make sure you include air blocks (spaces) in your skyblock layers to remove the filler material
 
 ## Commands
-Type the command "/tatters help" in game, to see the available commands. Or you can see the help in the translations file below.
+Type the command "/skyislands help" in game, to see the available commands. Or you can see the help in the translations file below.
 
 The commands are mainly meant for server play, you will need permssion level 2 to use them. You can give access to other players via command blocks.
 
 ## Translations
-To make your own translation, add a resource pack with an assets/tatters/lang/xx_yy.json
+To make your own translation, add a resource pack with an assets/skyislands/lang/xx_yy.json
 <br>Please feel free to contribute back any translations you make.
 
-[English](src/main/resources/assets/tatters/lang/en_us.json)
+[English](src/main/resources/assets/skyislands/lang/en_us.json)
