@@ -49,7 +49,7 @@
         "conditional": "false",
         "facing": "up"
       },
-      "nbt": "{conditionMet:0b,auto:0b,CustomName:'{\"text\":\"@\"}',powered:0b,Command:\"tatters home @p\",SuccessCount:0,TrackOutput:1b,UpdateLastExecution:1b}"
+      "nbt": "{conditionMet:0b,auto:0b,CustomName:'{\"text\":\"@\"}',powered:0b,Command:\"skyislands home @p\",SuccessCount:0,TrackOutput:1b,UpdateLastExecution:1b}"
     }
   }
 }

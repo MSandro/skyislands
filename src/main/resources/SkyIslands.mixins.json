@@ -4,8 +4,11 @@
   "package": "com.msandro.skyislands.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "AccessorBeardifier",
+    "AccessorNoiseChunk"
   ],
   "client": [
+    "client.AccessorWorldPreset"
   ],
   "injectors": {
     "defaultRequire": 1

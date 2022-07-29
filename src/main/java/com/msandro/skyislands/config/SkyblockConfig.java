@@ -128,7 +128,7 @@ public class SkyblockConfig extends Config {
     static void copySkyblocks() {
         mkdirs(SKYBLOCKS_DIR);
 
-        final Path skyblocks = SkyIslands.getModContainer().getPath("assets/tatters/skyblocks");
+        final Path skyblocks = SkyIslands.getModContainer().getPath("assets/skyislands/skyblocks");
         try {
             Files.list(skyblocks).filter(path -> path.getFileName().toString().endsWith(".json")).forEach(path -> {
                 try {

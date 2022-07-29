@@ -17,6 +17,7 @@
       "com.msandro.skyislands.SkyIslands"
     ]
   },
+  "accessWidener": "skyislands.accesswidener",
   "mixins": [
     "SkyIslands.mixins.json"
   ],

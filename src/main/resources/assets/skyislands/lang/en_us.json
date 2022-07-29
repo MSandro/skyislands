@@ -1,0 +1,22 @@
+{
+  "generator.skyislands": "Sky Block",
+
+  "skyislands.command.help.0": "/skyislands help - prints this message",
+  "skyislands.command.help.1": "/skyislands lobby - teleports the user to the lobby island",
+  "skyislands.command.help.2": "/skyislands home <player> - teleports the specified player to their island, creating an island if they don't have one (in single player use the lobby subcommand)", 
+  "skyislands.command.help.3": "/skyislands regen <player> - creates a new island for the player (even if they already have one) and teleports them to it",
+  "skyislands.command.help.4": "/skyislands visit <player> - teleports the user to the specified player's island",
+  "skyislands.command.help.5": "/skyislands team <player> <team> - teleports the player to the team island, creates the island if needed and moves the player to the team",
+  "skyislands.command.help.6": "/skyislands list - shows the claimed islands in the log",
+  "skyislands.command.help.7": "/skyislands reload - reloads the config files",
+  "skyislands.command.error": "Unexpected error, see the logs",
+  "skyislands.command.noskyblock": "Player does not have an island",
+  "skyislands.command.noteleport": "Cannot teleport players across worlds",
+  "skyislands.command.reloaded": "Configuration reloaded",
+  "skyislands.command.wrongworld": "This is not a skyislands world",
+
+  "skyislands.gui.error": "Error, see the logs",
+  "skyislands.gui.lobby": "Lobby",
+  "skyislands.gui.skyblock": "Sky Block",
+  "generator.skyislands-skyblock": "Sky Block"
+}

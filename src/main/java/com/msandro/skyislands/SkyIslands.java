@@ -1,5 +1,6 @@
 package com.msandro.skyislands;
 
+import com.msandro.skyislands.common.SkyblockChunkGenerator;
 import com.msandro.skyislands.common.Skyblocks;
 import com.msandro.skyislands.common.SkyCommand;
 import net.fabricmc.api.ModInitializer;
@@ -37,7 +38,7 @@ public class SkyIslands implements ModInitializer {
                 return;
             sky_onServerPlayerLoad(player, world);
         });
-        Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MOD_ID, "void"), VoidChunkGenerator.CODEC);
+        Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MOD_ID, "void"), SkyblockChunkGenerator.CODEC);
     }
 
     @SuppressWarnings("resource")
@@ -45,7 +46,8 @@ public class SkyIslands implements ModInitializer {
         if (world instanceof ServerLevel == false)
             return false;
         final ServerLevel serverWorld = (ServerLevel) world;
-        return world.dimension().equals(Level.OVERWORLD);
+        String genName = serverWorld.getChunkSource().getGenerator().getClass().getName().toLowerCase();
+        return genName.contains("sky") && world.dimension().equals(Level.OVERWORLD);
     }
 
     // Separate method to try to avoid the config referenced in Skyblocks getting loaded when not needed

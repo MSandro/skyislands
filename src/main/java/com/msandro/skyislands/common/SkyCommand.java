@@ -38,7 +38,7 @@ public class SkyCommand {
     public static int help(final CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         try {
             for (int i = 0; i < 8; ++i) {
-                feedback(context, "tatters.command.help." + i);
+                feedback(context, "skyislands.command.help." + i);
             }
             return Command.SINGLE_SUCCESS;
         }
@@ -50,10 +50,10 @@ public class SkyCommand {
     public static int reload(final CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         try {
             if (SkyConfig.reload(false)) {
-                feedback(context, "tatters.command.reloaded");
+                feedback(context, "skyislands.command.reloaded");
                 return Command.SINGLE_SUCCESS;
             }
-            feedback(context, "tatters.command.error");
+            feedback(context, "skyislands.command.error");
             return 0;
         } catch (Exception e) {
             throw handleError(e);
@@ -124,7 +124,7 @@ public class SkyCommand {
             final ServerPlayer toVisit = playerParameter(context);
             final Skyblock skyblock = skyblocks.getSkyblock(toVisit);
             if (skyblock == null) {
-                throw error("tatters.command.noskyblock");
+                throw error("skyislands.command.noskyblock");
             }
             teleport(skyblock, player);
             return Command.SINGLE_SUCCESS;
@@ -159,7 +159,7 @@ public class SkyCommand {
             throws CommandSyntaxException {
         final Skyblocks skyblocks = Skyblocks.getSkyblocks(context.getSource().getLevel());
         if (skyblocks == null) {
-            throw error("tatters.command.wrongworld");
+            throw error("skyislands.command.wrongworld");
         }
         return skyblocks;
     }
@@ -167,7 +167,7 @@ public class SkyCommand {
     public static void teleport(final Skyblock skyblock, final ServerPlayer player)
             throws CommandSyntaxException {
         if (!skyblock.teleport(player)) {
-            throw error("tatters.command.noteleport");
+            throw error("skyislands.command.noteleport");
         }
     }
 
@@ -209,6 +209,6 @@ public class SkyCommand {
         if (e instanceof CommandSyntaxException)
             return (CommandSyntaxException) e;
         log.error("Unexpected error in command", e);
-        return new SimpleCommandExceptionType(new TranslatableComponent("tatters.command.error")).create();
+        return new SimpleCommandExceptionType(new TranslatableComponent("skyislands.command.error")).create();
     }
 }
