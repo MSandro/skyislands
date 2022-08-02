@@ -46,8 +46,7 @@ public class SkyIslands implements ModInitializer {
         if (world instanceof ServerLevel == false)
             return false;
         final ServerLevel serverWorld = (ServerLevel) world;
-        String genName = serverWorld.getChunkSource().getGenerator().getClass().getName().toLowerCase();
-        return genName.contains("sky") && world.dimension().equals(Level.OVERWORLD);
+        return serverWorld.getChunkSource().getGenerator() instanceof SkyblockChunkGenerator && world.dimension().equals(Level.OVERWORLD);
     }
 
     // Separate method to try to avoid the config referenced in Skyblocks getting loaded when not needed
