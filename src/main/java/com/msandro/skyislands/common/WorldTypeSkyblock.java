@@ -6,9 +6,11 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 
 public class WorldTypeSkyblock extends WorldPreset {
     public static final WorldTypeSkyblock INSTANCE = new WorldTypeSkyblock();
+    public static final String ID = "skyblock";
+
 
     private WorldTypeSkyblock() {
-        super("skyislands-skyblock");
+        super(ID);
     }
 
     @Override
