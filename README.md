@@ -34,6 +34,8 @@ Click "Customize" to change the skyblock definition.
 Optionally you can also choose a lobby, but normally you would leave this as "--" in single player, meaning it will use the skyblock definition.
 
 ## Server
+level-type: skyislands-skyblock
+
 If you are just collaborating with friends, you can use the lobby as your skyblock.
 
 For a more public server, it is recommended to add a command block with a button to the lobby that runs the command "skyislands home @p".
