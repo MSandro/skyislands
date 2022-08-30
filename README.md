@@ -34,7 +34,9 @@ Click "Customize" to change the skyblock definition.
 Optionally you can also choose a lobby, but normally you would leave this as "--" in single player, meaning it will use the skyblock definition.
 
 ## Server
-level-type=skyblock
+level-type=
+1.19.x: skyislands:skyblock
+1.18.x: skyblock
 
 If you are just collaborating with friends, you can use the lobby as your skyblock.
 
