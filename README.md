@@ -29,8 +29,6 @@ To create a skyblock world in single player mode, use the "more options" button 
 
 You use the lobby as your skyblock in single player.
 
-Click "Customize" to change the skyblock definition.
-
 Optionally you can also choose a lobby, but normally you would leave this as "--" in single player, meaning it will use the skyblock definition.
 
 ## Server
@@ -65,7 +63,7 @@ The skyblock definition files in mod-pack-root/config/skyislands/skyblocks allow
 Sky-Islands has some predefined skyblocks:
 * default.json - a skyblock that should be familiar to modded players
 * traditional.json - more like the original vanilla skyblock
-* example-lobby.json - a simple (and garish) lobby with a command block to generate islands for players
+* lobby.json - a simple (and garish) lobby with a command block to generate islands for players
 * stone.json - a stoneblock like skyblock configuration
 
 The skyblock configuration options are:
